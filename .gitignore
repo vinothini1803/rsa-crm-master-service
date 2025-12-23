@@ -1,0 +1,8 @@
+build
+node_modules
+.env
+package-lock.json
+.vscode/launch.json
+.DS_Store
+
+.vscodes

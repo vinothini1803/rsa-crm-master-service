@@ -1,0 +1,120 @@
+{
+  "userService": {
+    "host": "http://localhost",
+    "version": "api/v1",
+    "port": "9201",
+    "app-id": "RAS-CRM-user",
+    "api-key": "",
+    "serviceAccess": {
+      "user": "user"
+    },
+    "endpoint": {
+      "login": "login",
+      "logout": "logout",
+      "register": "register",
+      "getAllUser": "getAllUsers",
+      "getUser": "getUser",
+      "getEntityUser": "getEntityUser",
+      "update": "update",
+      "forgotPassword": "forgot-password",
+      "updatePassword": "updatePassword",
+      "listRole": "listRole",
+      "addRole": "addRole",
+      "listPermissions": "listPermissions",
+      "validateToken": "validateToken",
+      "getAllSeeder": "seeder",
+      "getCallCenterByAgent": "getCallCenterByAgent",
+      "getClientsByUser": "getClientsByUser",
+      "getAgentsByRole": "getAgentsByRole",
+      "userMaster": {
+        "getList": "getList",
+        "save": "save",
+        "updateStatus": "updateStatus",
+        "delete": "delete",
+        "getEntityUser": "getEntityUser",
+        "getAllEntityUsers": "getAllEntityUsers",
+        "getUserClients": "getUserClients",
+        "getUsersByRoles": "getUsersByRoles",
+        "getEntityUserByWherClause": "getEntityUserByWherClause"
+      },
+      "roleMaster": {
+        "getDetailByName": "getDetailByName",
+        "getDetailById": "getDetailById",
+        "getDetailByIds": "getDetailByIds",
+        "listRole": "list",
+        "getByIds": "getByIds"
+      },
+      "getUserByUserName": "getUserByUserName",
+      "getRegionalManager": "getRegionalManager",
+      "checkOwnPatrolVehicleActiveShift": "checkOwnPatrolVehicleActiveShift",
+      "dataImport": {
+        "createImportDataAsUser": "createImportDataAsUser"
+      },
+      "templateGetMasterDetails": "template/getMasterDetails",
+      "importGetUserDetails": "import/getUserDetails",
+      "rsaAspOverAllMapViewLoginDetail": "rsa/asp/overAllMapView/loginDetail",
+      "rsaTechnicianOverAllMapViewLoginDetail": "rsa/technician/overAllMapView/loginDetail",
+      "manager": {
+        "cocoAssetActiveReminderToManagers": "manager/cocoAssetActiveReminderToManagers",
+        "getAspMechanicAttendanceDetail": "manager/getAspMechanicAttendanceDetail"
+      },
+      "commonGetMasterDetails": "common/getMasterDetails"
+    }
+  },
+  "caseService": {
+    "host": "http://localhost",
+    "version": "api/v1",
+    "port": "9203",
+    "app-id": "RAS-CRM-user",
+    "api-key": "",
+    "serviceAccess": {
+      "case": "case"
+    },
+    "endpoint": {
+      "case": {
+        "getAttachments": "getAllAttachment",
+        "upload": "upload",
+        "createCase": "addNewCase",
+        "updateCase": "updateCase",
+        "getAllCaseList": "getCaseList",
+        "getCaseDetail": "getCaseDetail",
+        "getActivityAspList": "activities/aspList",
+        "activityRequest": "activities/request",
+        "aspActivityDashboardDetail": "asp/activities/dasboardDetail",
+        "aspActivitiesList": "asp/activities/list",
+        "aspActivityAccept": "asp/activity/accept",
+        "aspActivityReject": "asp/activity/reject",
+        "aspActivityAssign": "asp/activity/assign",
+        "aspMechanicActivityAccept": "asp/activity/mechanic/accept",
+        "addActivityInventory": "asp/activity/addInventory",
+        "dealerActivityAcceptAndPay": "dealer/activity/acceptAndPay",
+        "aspActivityData": "asp/activityData",
+        "updateActivityVehicleNumber": "updateVehicleNumber",
+        "updateActivityChargesDetails": "updateChargesDetails",
+        "activitySendForApproval": "sendForApproval",
+        "activityUpdateStatus": "activities/updateAspActivityStatus",
+        "otpVerification": "activities/verifyOtp",
+        "updateAdditionalCharges": "activities/updateAdditionalCharges",
+        "getActivityCharges": "activityCharges",
+        "getAspActivityId": "activities/getAspActivityId",
+        "getAspRejectedActivity": "activities/getAspRejectedActivity",
+        "getAspCaseAssignedCountForScheduledDate": "activities/getAspCaseAssignedCountForScheduledDate",
+        "getAspWorkStatus": "activities/getAspWorkStatus",
+        "getAspMechanicWorkStatus": "activities/getAspMechanicWorkStatus",
+        "getActivityAspDetail": "asp/activities/getActivityAspDetail",
+        "createSlaForCase": "createSlaForCase",
+        "getDealersForDealerAdvancePaymentSla": "getDealersForDealerAdvancePaymentSla",
+        "updateDealerAdvanceSlaWarningStatus": "updateDealerAdvanceSlaWarningStatus",
+        "caseAutoCancel": "caseAutoCancel",
+        "getSlaListByCaseDetailId": "getSlaListByCaseDetailId",
+        "getTempCaseFormDetail": "getTempCaseFormDetail",
+        "rsaAspOverAllMapViewStatusDetail": "rsa/asp/overAllMapView/statusDetail",
+        "rsaTechnicianOverAllMapViewStatusDetail": "rsa/technician/overAllMapView/statusDetail",
+        "getAllSlaByCaseDetailId": "getAllSlaByCaseDetailId",
+        "getSubServiceRejectedAsps": "getSubServiceRejectedAsps",
+        "getAspMechanicOverallScheduledActivities": "activities/getAspMechanicOverallScheduledActivities",
+        "getAspMechanicInProgressActivities": "activities/getAspMechanicInProgressActivities"
+      }
+    }
+  }
+}
