@@ -1,6 +1,6 @@
 build
 node_modules
-.env
+# .env
 package-lock.json
 .vscode/launch.json
 .DS_Store

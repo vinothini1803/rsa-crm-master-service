@@ -2255,7 +2255,7 @@ export namespace CaseDataController {
       const fuelTypes = await FuelType.findAll({
         attributes: ["id", "name", "displayName"],
         order: [["id", "asc"]],
-        group: ["displayName"],
+        // group: ["displayName"],
       });
 
       return res.status(200).json({
@@ -2322,7 +2322,7 @@ export namespace CaseDataController {
       const fuelTypes = await FuelType.findAll({
         attributes: ["id", "name", "displayName"],
         order: [["id", "asc"]],
-        group: ["displayName"],
+        // group: ["displayName"],
       });
 
       return res.status(200).json({
