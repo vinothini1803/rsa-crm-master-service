@@ -129,17 +129,17 @@ export namespace AspDataController {
 
         let pickupDealer: any = inData[i]?.dealerId
           ? await Dealer.findOne({
-            where: { id: inData[i].dealerId },
-            attributes: [
-              "id",
-              "name",
-              "lat",
-              "long",
-              "mobileNumber",
-              "correspondenceAddress",
-            ],
-            paranoid: false,
-          })
+              where: { id: inData[i].dealerId },
+              attributes: [
+                "id",
+                "name",
+                "lat",
+                "long",
+                "mobileNumber",
+                "correspondenceAddress",
+              ],
+              paranoid: false,
+            })
           : null;
 
         //IF SCHEME DEALER AND THE LOCATION TYPE IS CUSTOMER MEANS CHANGE THE PICKUP DETAILS
@@ -163,17 +163,17 @@ export namespace AspDataController {
 
         let dropDealer: any = inData[i]?.deliveryRequestDropDealerId
           ? await Dealer.findOne({
-            where: { id: inData[i].deliveryRequestDropDealerId },
-            attributes: [
-              "id",
-              "name",
-              "lat",
-              "long",
-              "mobileNumber",
-              "correspondenceAddress",
-            ],
-            paranoid: false,
-          })
+              where: { id: inData[i].deliveryRequestDropDealerId },
+              attributes: [
+                "id",
+                "name",
+                "lat",
+                "long",
+                "mobileNumber",
+                "correspondenceAddress",
+              ],
+              paranoid: false,
+            })
           : null;
 
         //IF SCHEME DEALER AND THE LOCATION TYPE IS CUSTOMER MEANS CHANGE THE DROP DETAILS
@@ -266,8 +266,8 @@ export namespace AspDataController {
             .format("DD/MM/YYYY hh:mm A"),
           deliveryRequestPickupDate: inData[i].deliveryRequestPickupDate
             ? moment
-              .tz(inData[i].deliveryRequestPickupDate, "Asia/Kolkata")
-              .format("DD/MM/YYYY")
+                .tz(inData[i].deliveryRequestPickupDate, "Asia/Kolkata")
+                .format("DD/MM/YYYY")
             : null,
           deliveryRequestPickupTime: inData[i].deliveryRequestPickupTime,
           status: caseStatus ? caseStatus.dataValues.name : null,
@@ -495,15 +495,16 @@ export namespace AspDataController {
             estimatedTotalDuration: data.estimatedTotalDuration,
             estimatedAspToBreakdownInfo:
               data.estimatedAspToBreakdownKm &&
-                data.estimatedAspToBreakdownKmDuration
+              data.estimatedAspToBreakdownKmDuration
                 ? data.activity.caseDetail.statusId != 4
                   ? `${parseFloat(
-                    data.estimatedAspToBreakdownKm
-                  )} KM to Breakdown (${data.estimatedAspToBreakdownKmDuration
-                  })`
+                      data.estimatedAspToBreakdownKm
+                    )} KM to Breakdown (${
+                      data.estimatedAspToBreakdownKmDuration
+                    })`
                   : `${parseFloat(
-                    data.estimatedAspToBreakdownKm
-                  )} KM to Breakdown`
+                      data.estimatedAspToBreakdownKm
+                    )} KM to Breakdown`
                 : null,
             activityStatus: activityStatus
               ? activityStatus.dataValues.name
@@ -543,11 +544,11 @@ export namespace AspDataController {
             deliveryRequestPickupDate: data.activity.caseDetail
               .deliveryRequestPickupDate
               ? moment
-                .tz(
-                  data.activity.caseDetail.deliveryRequestPickupDate,
-                  "Asia/Kolkata"
-                )
-                .format("DD/MM/YYYY")
+                  .tz(
+                    data.activity.caseDetail.deliveryRequestPickupDate,
+                    "Asia/Kolkata"
+                  )
+                  .format("DD/MM/YYYY")
               : null,
             deliveryRequestPickupTime:
               data.activity.caseDetail.deliveryRequestPickupTime,
@@ -567,8 +568,8 @@ export namespace AspDataController {
               data.activity.advancePaymentMethodId ?? null,
             createdDate: data.activity.caseDetail.createdAt
               ? moment
-                .tz(data.activity.caseDetail.createdAt, "Asia/Kolkata")
-                .format("DD/MM/YYYY")
+                  .tz(data.activity.caseDetail.createdAt, "Asia/Kolkata")
+                  .format("DD/MM/YYYY")
               : null,
             aspSlaStatus: await Utils.getAspSlaStatus(
               data.activity.caseDetail,
@@ -580,7 +581,7 @@ export namespace AspDataController {
           });
         })
       );
-
+      console.log("11111111111111");
       return res.status(200).json({
         success: true,
         message: "success",
@@ -599,7 +600,7 @@ export namespace AspDataController {
     try {
       const inData = req.body.rows || req.body; // Support both old format (array) and new format (object with rows and type)
       const type = req.body.type; // Get type parameter to check if it's "activeRequest"
-      const rows = Array.isArray(inData) ? inData : (req.body.rows || []);
+      const rows = Array.isArray(inData) ? inData : req.body.rows || [];
 
       if (rows.length === 0) {
         return res.status(200).json({
@@ -626,7 +627,13 @@ export namespace AspDataController {
           ] = await Promise.all([
             Asp.findOne({
               where: { id: data.aspId },
-              attributes: ["id", "name", "code", "workshopName", "contactNumber"],
+              attributes: [
+                "id",
+                "name",
+                "code",
+                "workshopName",
+                "contactNumber",
+              ],
               paranoid: false,
             }),
             ActivityStatus.findOne({
@@ -720,7 +727,9 @@ export namespace AspDataController {
               ? data.activity.caseDetail.registrationNumber
               : null,
             vehicleMakeName: vehicleMake ? vehicleMake.dataValues.name : null,
-            vehicleModelName: vehicleModel ? vehicleModel.dataValues.name : null,
+            vehicleModelName: vehicleModel
+              ? vehicleModel.dataValues.name
+              : null,
             breakdownLocation: data.activity.caseDetail.caseInformation
               ? data.activity.caseDetail.caseInformation.breakdownLocation
               : null,
@@ -756,16 +765,16 @@ export namespace AspDataController {
               : null,
             aspServiceAcceptedAt: data.activity.aspServiceAcceptedAt
               ? moment
-                .tz(data.activity.aspServiceAcceptedAt, "Asia/Kolkata")
-                .format("DD/MM/YYYY hh:mm A")
+                  .tz(data.activity.aspServiceAcceptedAt, "Asia/Kolkata")
+                  .format("DD/MM/YYYY hh:mm A")
               : null,
             customerNeedToPay: data.activity.customerNeedToPay,
             caseStatusId: data.activity.caseDetail.statusId,
             caseStatusName: caseStatus ? caseStatus.dataValues.name : null,
             caseCreatedDate: data.activity.caseDetail.createdAt
               ? moment
-                .tz(data.activity.caseDetail.createdAt, "Asia/Kolkata")
-                .format("DD/MM/YYYY")
+                  .tz(data.activity.caseDetail.createdAt, "Asia/Kolkata")
+                  .format("DD/MM/YYYY")
               : null,
             canProceed: canProceed,
           });
@@ -789,6 +798,7 @@ export namespace AspDataController {
   // ACTIVITY DETAIL
   export async function fetchDataList(req: Request, res: Response) {
     try {
+      console.log("222222222222");
       const inData = req.body;
       if (!inData) {
         return res.status(200).json({
@@ -825,7 +835,7 @@ export namespace AspDataController {
         hubCapInventoryLimit,
         speakerInventoryLimit,
         floorMatInventoryLimit,
-        nonMembershipDetail
+        nonMembershipDetail,
       ]: any = await Promise.all([
         CaseSubject.findOne({
           where: { id: inData.activity.caseDetail.subjectID },
@@ -920,10 +930,10 @@ export namespace AspDataController {
         }),
         inData.activity.caseDetail.agentId
           ? axios
-            .post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
-              id: inData.activity.caseDetail.agentId,
-            })
-            .then((response) => response.data) // Ensure the promise resolves to the data directly
+              .post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
+                id: inData.activity.caseDetail.agentId,
+              })
+              .then((response) => response.data) // Ensure the promise resolves to the data directly
           : Promise.resolve(null), // Return a resolved promise with null value if agentId is not present
         ActivityFinanceStatus.findAll({
           where: {
@@ -938,14 +948,14 @@ export namespace AspDataController {
         }),
 
         inData.activity.caseDetail.caseInformation &&
-          inData.activity.caseDetail.caseInformation.breakdownAreaId
+        inData.activity.caseDetail.caseInformation.breakdownAreaId
           ? City.findOne({
-            where: {
-              id: inData.activity.caseDetail.caseInformation.breakdownAreaId,
-            },
-            attributes: ["id", "locationTypeId"],
-            paranoid: false,
-          })
+              where: {
+                id: inData.activity.caseDetail.caseInformation.breakdownAreaId,
+              },
+              attributes: ["id", "locationTypeId"],
+              paranoid: false,
+            })
           : Promise.resolve(null),
 
         axios.post(
@@ -961,21 +971,21 @@ export namespace AspDataController {
 
         inData.activity.slaViolationReasonId
           ? SlaViolateReason.findOne({
-            attributes: ["id", "name"],
-            where: {
-              id: inData.activity.slaViolationReasonId,
-            },
-            paranoid: false,
-          })
+              attributes: ["id", "name"],
+              where: {
+                id: inData.activity.slaViolationReasonId,
+              },
+              paranoid: false,
+            })
           : Promise.resolve(null),
 
         inData.activity.activityAspFromLocations.length > 0 &&
-          inData.activity.activityAspToLocations.length > 0
+        inData.activity.activityAspToLocations.length > 0
           ? Utils.getGoogleDistanceDuration(
-            inData.activity.activityAspFromLocations,
-            inData.activity.activityAspToLocations,
-            2
-          )
+              inData.activity.activityAspFromLocations,
+              inData.activity.activityAspToLocations,
+              2
+            )
           : Promise.resolve(null),
 
         Config.findOne({
@@ -996,10 +1006,14 @@ export namespace AspDataController {
         (() => {
           let membershipId = null;
           // First, try to get from activityTransactions (new approach)
-          if (inData.activity.activityTransactions && inData.activity.activityTransactions.length > 0) {
-            const nonMembershipTransaction = inData.activity.activityTransactions.find(
-              (txn: any) => txn.paymentTypeId === 174 && txn.membershipId
-            );
+          if (
+            inData.activity.activityTransactions &&
+            inData.activity.activityTransactions.length > 0
+          ) {
+            const nonMembershipTransaction =
+              inData.activity.activityTransactions.find(
+                (txn: any) => txn.paymentTypeId === 174 && txn.membershipId
+              );
             if (nonMembershipTransaction) {
               membershipId = nonMembershipTransaction.membershipId;
             }
@@ -1009,32 +1023,34 @@ export namespace AspDataController {
             membershipId = inData.activity.nonMembershipId;
           }
           // Make API call if membershipId is available
-          return membershipId ? axios.post(
-            `${process.env.RSA_BASE_URL}/crm/get/nonMembership/cancellationInfo`,
-            { nonMembershipId: membershipId }
-          ) : Promise.resolve(null);
-        })()
+          return membershipId
+            ? axios.post(
+                `${process.env.RSA_BASE_URL}/crm/get/nonMembership/cancellationInfo`,
+                { nonMembershipId: membershipId }
+              )
+            : Promise.resolve(null);
+        })(),
       ]);
 
       let pickupDealer: any = inData.activity.caseDetail.dealerId
         ? await Dealer.findOne({
-          where: { id: inData.activity.caseDetail.dealerId },
-          attributes: [
-            "id",
-            "code",
-            "name",
-            "mobileNumber",
-            "email",
-            "addressLineOne",
-            "addressLineTwo",
-            "correspondenceAddress",
-            "area",
-            "pincode",
-            "lat",
-            "long",
-          ],
-          paranoid: false,
-        })
+            where: { id: inData.activity.caseDetail.dealerId },
+            attributes: [
+              "id",
+              "code",
+              "name",
+              "mobileNumber",
+              "email",
+              "addressLineOne",
+              "addressLineTwo",
+              "correspondenceAddress",
+              "area",
+              "pincode",
+              "lat",
+              "long",
+            ],
+            paranoid: false,
+          })
         : null;
 
       //IF SCHEME DEALER AND THE LOCATION TYPE IS CUSTOMER MEANS CHANGE THE PICKUP DETAILS
@@ -1065,25 +1081,25 @@ export namespace AspDataController {
       let dropDealer: any = inData.activity.caseDetail
         .deliveryRequestDropDealerId
         ? await Dealer.findOne({
-          where: {
-            id: inData.activity.caseDetail.deliveryRequestDropDealerId,
-          },
-          attributes: [
-            "id",
-            "code",
-            "name",
-            "mobileNumber",
-            "email",
-            "addressLineOne",
-            "addressLineTwo",
-            "correspondenceAddress",
-            "area",
-            "pincode",
-            "lat",
-            "long",
-          ],
-          paranoid: false,
-        })
+            where: {
+              id: inData.activity.caseDetail.deliveryRequestDropDealerId,
+            },
+            attributes: [
+              "id",
+              "code",
+              "name",
+              "mobileNumber",
+              "email",
+              "addressLineOne",
+              "addressLineTwo",
+              "correspondenceAddress",
+              "area",
+              "pincode",
+              "lat",
+              "long",
+            ],
+            paranoid: false,
+          })
         : null;
 
       //IF SCHEME DEALER AND THE LOCATION TYPE IS CUSTOMER MEANS CHANGE THE DROP DETAILS
@@ -1435,15 +1451,16 @@ export namespace AspDataController {
           inData.estimatedAspToBreakdownKmDuration,
         estimatedAspToBreakdownInfo:
           inData.estimatedAspToBreakdownKm &&
-            inData.estimatedAspToBreakdownKmDuration
+          inData.estimatedAspToBreakdownKmDuration
             ? inData.activity.caseDetail.statusId != 4
               ? `${parseFloat(
-                inData.estimatedAspToBreakdownKm
-              )} KM to Breakdown (${inData.estimatedAspToBreakdownKmDuration
-              })`
+                  inData.estimatedAspToBreakdownKm
+                )} KM to Breakdown (${
+                  inData.estimatedAspToBreakdownKmDuration
+                })`
               : `${parseFloat(
-                inData.estimatedAspToBreakdownKm
-              )} KM to Breakdown`
+                  inData.estimatedAspToBreakdownKm
+                )} KM to Breakdown`
             : null,
         estimatedBreakdownToAspKm: inData.estimatedBreakdownToAspKm,
         estimatedBreakdownToAspKmDuration:
@@ -1490,23 +1507,78 @@ export namespace AspDataController {
 
         aspServiceAcceptedAt: inData.activity.aspServiceAcceptedAt
           ? moment
-            .tz(inData.activity.aspServiceAcceptedAt, "Asia/Kolkata")
-            .format("DD/MM/YYYY hh:mm A")
+              .tz(inData.activity.aspServiceAcceptedAt, "Asia/Kolkata")
+              .format("DD/MM/YYYY hh:mm A")
           : null,
         aspServiceAcceptedAtInMilliSeconds: inData.activity.aspServiceAcceptedAt
           ? moment
-            .tz(inData.activity.aspServiceAcceptedAt, "Asia/Kolkata")
-            .valueOf()
+              .tz(inData.activity.aspServiceAcceptedAt, "Asia/Kolkata")
+              .valueOf()
           : null,
+        aspRejectedAt: inData.activity.aspServiceRejectedAt
+          ? moment
+              .tz(inData.activity.aspServiceRejectedAt, "Asia/Kolkata")
+              .format("DD/MM/YYYY hh:mm A")
+          : null,
+        aspRejectedAtInMilliSeconds: inData.activity.aspServiceRejectedAt
+          ? moment
+              .tz(inData.activity.aspServiceRejectedAt, "Asia/Kolkata")
+              .valueOf()
+          : null,
+       startedToBreakdownAt: inData.activity.aspStartedToBreakdownAt
+  ? moment
+      .tz(inData.activity.aspStartedToBreakdownAt, "Asia/Kolkata")
+      .format("DD/MM/YYYY hh:mm A")
+  : null,
+startedToBreakdownAtInMilliSeconds:
+  inData.activity.aspStartedToBreakdownAt
+    ? moment
+        .tz(inData.activity.aspStartedToBreakdownAt, "Asia/Kolkata")
+        .valueOf()
+    : null,
+// reachedBreakdownAt: inData.activity.aspReachedToBreakdownAt
+//   ? moment
+//       .tz(inData.activity.aspReachedToBreakdownAt, "Asia/Kolkata")
+//       .format("DD/MM/YYYY hh:mm A")
+//   : null,
+// reachedBreakdownAtInMilliSeconds:
+//   inData.activity.aspReachedToBreakdownAt
+//     ? moment
+//         .tz(inData.activity.aspReachedToBreakdownAt, "Asia/Kolkata")
+//         .valueOf()
+//     : null,
+// activityStartedAt: inData.activity.serviceStartDateTime
+//   ? moment
+//       .tz(inData.activity.serviceStartDateTime, "Asia/Kolkata")
+//       .format("DD/MM/YYYY hh:mm A")
+//   : null,
+// activityStartedAtInMilliSeconds:
+//   inData.activity.serviceStartDateTime
+//     ? moment
+//         .tz(inData.activity.serviceStartDateTime, "Asia/Kolkata")
+//         .valueOf()
+//     : null,
+// activityEndedAt: inData.activity.serviceEndDateTime
+//   ? moment
+//       .tz(inData.activity.serviceEndDateTime, "Asia/Kolkata")
+//       .format("DD/MM/YYYY hh:mm A")
+//   : null,
+// activityEndedAtInMilliSeconds:
+//   inData.activity.serviceEndDateTime
+//     ? moment
+//         .tz(inData.activity.serviceEndDateTime, "Asia/Kolkata")
+//         .valueOf()
+//     : null,
+
         aspEndServiceAt: inData.activity.aspEndServiceAt
           ? moment
-            .tz(inData.activity.aspEndServiceAt, "Asia/Kolkata")
-            .format("DD/MM/YYYY hh:mm A")
+              .tz(inData.activity.aspEndServiceAt, "Asia/Kolkata")
+              .format("DD/MM/YYYY hh:mm A")
           : null,
         sentApprovalAt: inData.activity.sentApprovalAt
           ? moment
-            .tz(inData.activity.sentApprovalAt, "Asia/Kolkata")
-            .format("DD/MM/YYYY hh:mm A")
+              .tz(inData.activity.sentApprovalAt, "Asia/Kolkata")
+              .format("DD/MM/YYYY hh:mm A")
           : null,
         sentApprovalAtInMilliSeconds: inData.activity.sentApprovalAt
           ? moment.tz(inData.activity.sentApprovalAt, "Asia/Kolkata").valueOf()
@@ -1526,14 +1598,14 @@ export namespace AspDataController {
           agentName: agent?.user?.name || null,
           agentAssignedAt: inData.activity.caseDetail.agentAssignedAt
             ? moment
-              .tz(inData.activity.caseDetail.agentAssignedAt, "Asia/Kolkata")
-              .format("DD/MM/YYYY hh:mm A")
+                .tz(inData.activity.caseDetail.agentAssignedAt, "Asia/Kolkata")
+                .format("DD/MM/YYYY hh:mm A")
             : null,
           agentAssignedAtInMilliSeconds: inData.activity.caseDetail
             .agentAssignedAt
             ? moment
-              .tz(inData.activity.caseDetail.agentAssignedAt, "Asia/Kolkata")
-              .valueOf()
+                .tz(inData.activity.caseDetail.agentAssignedAt, "Asia/Kolkata")
+                .valueOf()
             : null,
           caseSubject: caseSubject ? caseSubject.dataValues.name : null,
           subServiceId: subService ? subService.dataValues.id : null,
@@ -1578,27 +1650,27 @@ export namespace AspDataController {
           deliveryRequestPickupDate: inData.activity.caseDetail
             .deliveryRequestPickupDate
             ? moment
-              .tz(
-                inData.activity.caseDetail.deliveryRequestPickupDate,
-                "Asia/Kolkata"
-              )
-              .format("DD/MM/YYYY")
+                .tz(
+                  inData.activity.caseDetail.deliveryRequestPickupDate,
+                  "Asia/Kolkata"
+                )
+                .format("DD/MM/YYYY")
             : null,
           deliveryRequestPickupTime:
             inData.activity.caseDetail.deliveryRequestPickupTime,
           description: inData.activity.caseDetail.description,
           createdDate: inData.activity.caseDetail.createdAt
             ? moment
-              .tz(inData.activity.caseDetail.createdAt, "Asia/Kolkata")
-              .format("DD-MM-YYYY")
+                .tz(inData.activity.caseDetail.createdAt, "Asia/Kolkata")
+                .format("DD-MM-YYYY")
             : null,
           caseCreatedDateTime: moment
             .tz(inData.activity.caseDetail.createdAt, "Asia/Kolkata")
             .format("DD/MM/YYYY hh:mm A"),
           createdAtInMilliSeconds: inData.activity.caseDetail.createdAt
             ? moment
-              .tz(inData.activity.caseDetail.createdAt, "Asia/Kolkata")
-              .valueOf()
+                .tz(inData.activity.caseDetail.createdAt, "Asia/Kolkata")
+                .valueOf()
             : null,
           pickupDealer: pickupDealer,
           dropDealer: dropDealer,
@@ -1618,18 +1690,18 @@ export namespace AspDataController {
           : null,
         serviceStartDateTime: inData.activity.serviceStartDateTime
           ? moment
-            .tz(inData.activity.serviceStartDateTime, "Asia/Kolkata")
-            .format("DD/MM/YYYY HH:mm:ss")
+              .tz(inData.activity.serviceStartDateTime, "Asia/Kolkata")
+              .format("DD/MM/YYYY HH:mm:ss")
           : null,
         serviceResumeDateTime: inData.activity.serviceResumeDateTime
           ? moment
-            .tz(inData.activity.serviceResumeDateTime, "Asia/Kolkata")
-            .format("DD/MM/YYYY HH:mm:ss")
+              .tz(inData.activity.serviceResumeDateTime, "Asia/Kolkata")
+              .format("DD/MM/YYYY HH:mm:ss")
           : null,
         serviceEndDateTime: inData.activity.serviceEndDateTime
           ? moment
-            .tz(inData.activity.serviceEndDateTime, "Asia/Kolkata")
-            .format("DD/MM/YYYY HH:mm:ss")
+              .tz(inData.activity.serviceEndDateTime, "Asia/Kolkata")
+              .format("DD/MM/YYYY HH:mm:ss")
           : null,
         serviceDuration: inData.activity.serviceDuration
           ? Utils.secondsToTime(inData.activity.serviceDuration)
@@ -1641,23 +1713,23 @@ export namespace AspDataController {
         serviceStatus: inData.activity.serviceStatus,
         aspReachedToBreakdownAt: inData.activity.aspReachedToBreakdownAt
           ? moment
-            .tz(inData.activity.aspReachedToBreakdownAt, "Asia/Kolkata")
-            .format("DD/MM/YYYY hh:mm A")
+              .tz(inData.activity.aspReachedToBreakdownAt, "Asia/Kolkata")
+              .format("DD/MM/YYYY hh:mm A")
           : null,
         aspReachedToBreakdownFormattedDateTime: inData.activity
           .aspReachedToBreakdownAt
           ? inData.activity.caseDetail.statusId == 4
             ? moment
-              .tz(inData.activity.aspReachedToBreakdownAt, "Asia/Kolkata")
-              .format("DD/MM/YYYY HH:mm:ss")
+                .tz(inData.activity.aspReachedToBreakdownAt, "Asia/Kolkata")
+                .format("DD/MM/YYYY HH:mm:ss")
             : moment
-              .tz(inData.activity.aspReachedToBreakdownAt, "Asia/Kolkata")
-              .format("DD/MM/YYYY hh:mm A")
+                .tz(inData.activity.aspReachedToBreakdownAt, "Asia/Kolkata")
+                .format("DD/MM/YYYY hh:mm A")
           : null,
         aspReachedToDropAt: inData.activity.aspReachedToDropAt
           ? moment
-            .tz(inData.activity.aspReachedToDropAt, "Asia/Kolkata")
-            .format("DD/MM/YYYY hh:mm A")
+              .tz(inData.activity.aspReachedToDropAt, "Asia/Kolkata")
+              .format("DD/MM/YYYY hh:mm A")
           : null,
         rsaActivityInventory: inData.activity.rsaActivityInventories
           ? inData.activity.rsaActivityInventories
@@ -1676,16 +1748,16 @@ export namespace AspDataController {
         customerInvoiceNumber: inData.activity.customerInvoiceNumber,
         agentPickedAt: inData.activity.agentPickedAt
           ? moment
-            .tz(inData.activity.agentPickedAt, "Asia/Kolkata")
-            .format("DD/MM/YYYY hh:mm A")
+              .tz(inData.activity.agentPickedAt, "Asia/Kolkata")
+              .format("DD/MM/YYYY hh:mm A")
           : null,
         agentPickedAtInMilliSeconds: inData.activity.agentPickedAt
           ? moment.tz(inData.activity.agentPickedAt, "Asia/Kolkata").valueOf()
           : null,
         customerInvoiceDate: inData.activity.customerInvoiceDate
           ? moment
-            .tz(inData.activity.customerInvoiceDate, "Asia/Kolkata")
-            .format("DD/MM/YYYY")
+              .tz(inData.activity.customerInvoiceDate, "Asia/Kolkata")
+              .format("DD/MM/YYYY")
           : null,
         customerInvoicePath: inData.activity.customerInvoicePath
           ? `${process.env.RSA_WEB_BASE_URL}${inData.activity.customerInvoicePath}`
@@ -1713,8 +1785,8 @@ export namespace AspDataController {
         serviceInitiatingAt: inData.activity.serviceInitiatingAt,
         serviceInitiatingAtInMilliSeconds: inData.activity.serviceInitiatingAt
           ? moment
-            .tz(inData.activity.serviceInitiatingAt, "Asia/Kolkata")
-            .valueOf()
+              .tz(inData.activity.serviceInitiatingAt, "Asia/Kolkata")
+              .valueOf()
           : null,
         serviceExpectedAt: inData.activity.serviceExpectedAt,
         slaViolateCheckBaseMilliSeconds:
@@ -1732,18 +1804,18 @@ export namespace AspDataController {
           : null,
         aspReachedToPickupAt: inData.activity.aspReachedToPickupAt
           ? moment
-            .tz(inData.activity.aspReachedToPickupAt, "Asia/Kolkata")
-            .format("DD/MM/YYYY hh:mm A")
+              .tz(inData.activity.aspReachedToPickupAt, "Asia/Kolkata")
+              .format("DD/MM/YYYY hh:mm A")
           : null,
         aspReachedToPickupFormattedDateTime: inData.activity
           .aspReachedToPickupAt
           ? inData.activity.caseDetail.statusId == 4
             ? moment
-              .tz(inData.activity.aspReachedToPickupAt, "Asia/Kolkata")
-              .format("DD/MM/YYYY HH:mm:ss")
+                .tz(inData.activity.aspReachedToPickupAt, "Asia/Kolkata")
+                .format("DD/MM/YYYY HH:mm:ss")
             : moment
-              .tz(inData.activity.aspReachedToPickupAt, "Asia/Kolkata")
-              .format("DD/MM/YYYY hh:mm A")
+                .tz(inData.activity.aspReachedToPickupAt, "Asia/Kolkata")
+                .format("DD/MM/YYYY hh:mm A")
           : null,
 
         bdOrPickupReachSlaViolationReason: slaViolationReasonDetail
@@ -1752,9 +1824,9 @@ export namespace AspDataController {
         aspActualKmTravelled: activityAspLiveLocationResponse?.[0]
           ?.elements?.[0]?.distance?.value
           ? (
-            activityAspLiveLocationResponse[0].elements[0].distance.value /
-            1000
-          ).toFixed(2) + " km"
+              activityAspLiveLocationResponse[0].elements[0].distance.value /
+              1000
+            ).toFixed(2) + " km"
           : "0 km",
 
         hubCapInventoryLimit: hubCapInventoryLimit?.dataValues?.name || "10",
@@ -1781,7 +1853,8 @@ export namespace AspDataController {
         customerAgreedToAdditionalPayment:
           inData.activity.customerAgreedToAdditionalPayment,
         additionalPaymentRemarks: inData.activity.additionalPaymentRemarks,
-        additionalKmEstimatedTotalAmount: inData.additionalKmEstimatedTotalAmount,
+        additionalKmEstimatedTotalAmount:
+          inData.additionalKmEstimatedTotalAmount,
       });
       return res.status(200).json({
         success: true,
@@ -1917,16 +1990,16 @@ export namespace AspDataController {
           : null,
         aspServiceAcceptedAt: inData.activity.aspServiceAcceptedAt
           ? moment
-            .tz(inData.activity.aspServiceAcceptedAt, "Asia/Kolkata")
-            .format("DD/MM/YYYY hh:mm A")
+              .tz(inData.activity.aspServiceAcceptedAt, "Asia/Kolkata")
+              .format("DD/MM/YYYY hh:mm A")
           : null,
         customerNeedToPay: inData.activity.customerNeedToPay,
         caseStatusId: inData.activity.caseDetail.statusId,
         caseStatusName: caseStatus ? caseStatus.dataValues.name : null,
         caseCreatedDate: inData.activity.caseDetail.createdAt
           ? moment
-            .tz(inData.activity.caseDetail.createdAt, "Asia/Kolkata")
-            .format("DD/MM/YYYY")
+              .tz(inData.activity.caseDetail.createdAt, "Asia/Kolkata")
+              .format("DD/MM/YYYY")
           : null,
       };
 
@@ -2055,13 +2128,13 @@ export namespace AspDataController {
         expectedServiceStartDateTime: inData.activity
           .expectedServiceStartDateTime
           ? moment
-            .tz(inData.activity.expectedServiceStartDateTime, "Asia/Kolkata")
-            .format("DD/MM/YYYY hh:mm A")
+              .tz(inData.activity.expectedServiceStartDateTime, "Asia/Kolkata")
+              .format("DD/MM/YYYY hh:mm A")
           : null,
         expectedServiceEndDateTime: inData.activity.expectedServiceEndDateTime
           ? moment
-            .tz(inData.activity.expectedServiceEndDateTime, "Asia/Kolkata")
-            .format("DD/MM/YYYY hh:mm A")
+              .tz(inData.activity.expectedServiceEndDateTime, "Asia/Kolkata")
+              .format("DD/MM/YYYY hh:mm A")
           : null,
         comments: inData.activity.comments,
 
@@ -2156,17 +2229,17 @@ export namespace AspDataController {
         await Promise.all([
           inData.dealerId
             ? Dealer.findOne({
-              where: { id: inData.dealerId },
-              attributes: ["lat", "long"],
-              paranoid: false,
-            })
+                where: { id: inData.dealerId },
+                attributes: ["lat", "long"],
+                paranoid: false,
+              })
             : Promise.resolve(null),
           inData.dropDealerId
             ? Dealer.findOne({
-              where: { id: inData.dropDealerId },
-              attributes: ["lat", "long"],
-              paranoid: false,
-            })
+                where: { id: inData.dropDealerId },
+                attributes: ["lat", "long"],
+                paranoid: false,
+              })
             : Promise.resolve(null),
           axios.post(
             `${caseServiceUrl}/${endpoint.case.getSubServiceRejectedAsps}`,
@@ -2389,38 +2462,43 @@ export namespace AspDataController {
           caseDetailId: inData.caseDetailId,
           subServiceId: 1, //Vehicle Transfer
         };
-        const [getAspActivityDetail, getAspRejectedActivity, getAspWorkStatus, getAspCaseAssignedCount, getRmDetail]: any =
-          await Promise.all([
-            //CHECK ASP HAS ACTIVITY FOR CASE DETAIL AND GIVE ACTIVITY ID
-            axios.post(
-              `${caseServiceUrl}/${endpoint.case.getAspActivityId}`,
-              aspData
-            ),
-            //CHECK ASP HAS REJECTED ACTIVITY FOR THE CASE AND SUB SERVICE
-            axios.post(
-              `${caseServiceUrl}/${endpoint.case.getAspRejectedActivity}`,
-              aspData
-            ),
-            //GET ASP WORK STATUS BASED ON PICKUP DATE AND DRIVERS AVAILABILITY
-            axios.post(`${caseServiceUrl}/${endpoint.case.getAspWorkStatus}`, {
+        const [
+          getAspActivityDetail,
+          getAspRejectedActivity,
+          getAspWorkStatus,
+          getAspCaseAssignedCount,
+          getRmDetail,
+        ]: any = await Promise.all([
+          //CHECK ASP HAS ACTIVITY FOR CASE DETAIL AND GIVE ACTIVITY ID
+          axios.post(
+            `${caseServiceUrl}/${endpoint.case.getAspActivityId}`,
+            aspData
+          ),
+          //CHECK ASP HAS REJECTED ACTIVITY FOR THE CASE AND SUB SERVICE
+          axios.post(
+            `${caseServiceUrl}/${endpoint.case.getAspRejectedActivity}`,
+            aspData
+          ),
+          //GET ASP WORK STATUS BASED ON PICKUP DATE AND DRIVERS AVAILABILITY
+          axios.post(`${caseServiceUrl}/${endpoint.case.getAspWorkStatus}`, {
+            aspId: aspPickupProviders[i].dataValues.id,
+            hasMechanic: aspPickupProviders[i].dataValues.hasMechanic,
+            aspMechanics: aspPickupProviders[i].aspMechanics,
+            serviceScheduledDate: inData.deliveryRequestPickupDate,
+          }),
+          // GET CASE ASSIGNED COUNT FOR SERVICE SCHEDULED DATE
+          axios.post(
+            `${caseServiceUrl}/${endpoint.case.getAspCaseAssignedCountForScheduledDate}`,
+            {
               aspId: aspPickupProviders[i].dataValues.id,
-              hasMechanic: aspPickupProviders[i].dataValues.hasMechanic,
-              aspMechanics: aspPickupProviders[i].aspMechanics,
               serviceScheduledDate: inData.deliveryRequestPickupDate,
-            }),
-            // GET CASE ASSIGNED COUNT FOR SERVICE SCHEDULED DATE
-            axios.post(
-              `${caseServiceUrl}/${endpoint.case.getAspCaseAssignedCountForScheduledDate}`,
-              {
-                aspId: aspPickupProviders[i].dataValues.id,
-                serviceScheduledDate: inData.deliveryRequestPickupDate,
-              }
-            ),
-            // GET REGIONAL MANAGER DETAILS
-            axios.post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
-              id: aspPickupProviders[i].dataValues.rmId,
-            }),
-          ]);
+            }
+          ),
+          // GET REGIONAL MANAGER DETAILS
+          axios.post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
+            id: aspPickupProviders[i].dataValues.rmId,
+          }),
+        ]);
 
         // CHECK COCO TECHNICIAN IS IN SHIFT FOR THE COCO VEHICLE
         let cocoTechnicianInShift = false;
@@ -2479,7 +2557,10 @@ export namespace AspDataController {
         // }
 
         //IF OWN PATROL ASP THEN GET COCO VEHICLE MATCHED MECHANICS
-        if (aspPickupProviders[i].dataValues.isOwnPatrol && aspPickupProviders[i].ownPatrolVehicle) {
+        if (
+          aspPickupProviders[i].dataValues.isOwnPatrol &&
+          aspPickupProviders[i].ownPatrolVehicle
+        ) {
           const vehicleMatchedMechanics = await AspMechanic.findAll({
             where: {
               cocoVehicleId: aspPickupProviders[i].ownPatrolVehicle.id,
@@ -2503,21 +2584,35 @@ export namespace AspDataController {
         }
 
         //GET ASP MECHANIC IN PROGRESS ACTIVITIES
-        if (aspPickupProviders[i].dataValues.aspMechanics && aspPickupProviders[i].dataValues.aspMechanics.length > 0) {
-          const aspMechanicIds = aspPickupProviders[i].dataValues.aspMechanics.map(
-            (aspMechanic: any) => aspMechanic?.dataValues?.id
-          ).filter((id: any) => id != null);
+        if (
+          aspPickupProviders[i].dataValues.aspMechanics &&
+          aspPickupProviders[i].dataValues.aspMechanics.length > 0
+        ) {
+          const aspMechanicIds = aspPickupProviders[i].dataValues.aspMechanics
+            .map((aspMechanic: any) => aspMechanic?.dataValues?.id)
+            .filter((id: any) => id != null);
 
           if (aspMechanicIds.length > 0) {
-            const aspMechanicInProgressResponse = await Utils.aspMechanicInProgressActivities(aspMechanicIds, inData.serviceScheduledDate);
-            if (aspMechanicInProgressResponse.success && Array.isArray(aspMechanicInProgressResponse.data)) {
-              for (const aspMechanic of aspPickupProviders[i].dataValues.aspMechanics) {
+            const aspMechanicInProgressResponse =
+              await Utils.aspMechanicInProgressActivities(
+                aspMechanicIds,
+                inData.serviceScheduledDate
+              );
+            if (
+              aspMechanicInProgressResponse.success &&
+              Array.isArray(aspMechanicInProgressResponse.data)
+            ) {
+              for (const aspMechanic of aspPickupProviders[i].dataValues
+                .aspMechanics) {
                 if (aspMechanic?.dataValues?.id) {
-                  const aspMechanicInProgressActivity = aspMechanicInProgressResponse.data.find(
-                    (activity: any) => activity.aspMechanicId === aspMechanic.dataValues.id
-                  );
+                  const aspMechanicInProgressActivity =
+                    aspMechanicInProgressResponse.data.find(
+                      (activity: any) =>
+                        activity.aspMechanicId === aspMechanic.dataValues.id
+                    );
                   if (aspMechanicInProgressActivity) {
-                    aspMechanic.dataValues.assignedCount = aspMechanicInProgressActivity.assignedCount || 0;
+                    aspMechanic.dataValues.assignedCount =
+                      aspMechanicInProgressActivity.assignedCount || 0;
                   }
                 }
               }
@@ -2531,13 +2626,16 @@ export namespace AspDataController {
           aspPickupProviders[i].dataValues.aspMechanics.length > 0
         ) {
           const uniqueMap = new Map();
-          for (const aspMechanic of aspPickupProviders[i].dataValues.aspMechanics) {
+          for (const aspMechanic of aspPickupProviders[i].dataValues
+            .aspMechanics) {
             const id = aspMechanic?.dataValues?.id;
             if (id && !uniqueMap.has(id)) {
               uniqueMap.set(id, aspMechanic);
             }
           }
-          aspPickupProviders[i].dataValues.aspMechanics = Array.from(uniqueMap.values());
+          aspPickupProviders[i].dataValues.aspMechanics = Array.from(
+            uniqueMap.values()
+          );
         }
 
         //GET ASP MECHANIC WORK STATUS
@@ -2560,7 +2658,8 @@ export namespace AspDataController {
           activityId: getAspActivityDetail.data.success
             ? getAspActivityDetail.data.data
             : null,
-          rejectedActivityExists: getAspRejectedActivity?.data?.activityExists || false,
+          rejectedActivityExists:
+            getAspRejectedActivity?.data?.activityExists || false,
           distance: data[i]?.elements[0]?.distance?.text || null,
           duration: data[i]?.elements[0]?.duration?.text || null,
           estimatedTotalKm: combinedDistances[i]?.totalDistance || null,
@@ -2737,38 +2836,43 @@ export namespace AspDataController {
           caseDetailId: inData.caseDetailId,
           subServiceId: 1, //Vehicle Transfer
         };
-        const [getAspActivityDetail, getAspRejectedActivity, getAspWorkStatus, getAspCaseAssignedCount, getRmDetail]: any =
-          await Promise.all([
-            //CHECK ASP HAS ACTIVITY FOR CASE DETAIL AND GIVE ACTIVITY ID
-            axios.post(
-              `${caseServiceUrl}/${endpoint.case.getAspActivityId}`,
-              aspData
-            ),
-            //CHECK ASP HAS REJECTED ACTIVITY FOR THE CASE AND SUB SERVICE
-            axios.post(
-              `${caseServiceUrl}/${endpoint.case.getAspRejectedActivity}`,
-              aspData
-            ),
-            //GET ASP WORK STATUS BASED ON PICKUP DATE AND DRIVERS AVAILABILITY
-            axios.post(`${caseServiceUrl}/${endpoint.case.getAspWorkStatus}`, {
+        const [
+          getAspActivityDetail,
+          getAspRejectedActivity,
+          getAspWorkStatus,
+          getAspCaseAssignedCount,
+          getRmDetail,
+        ]: any = await Promise.all([
+          //CHECK ASP HAS ACTIVITY FOR CASE DETAIL AND GIVE ACTIVITY ID
+          axios.post(
+            `${caseServiceUrl}/${endpoint.case.getAspActivityId}`,
+            aspData
+          ),
+          //CHECK ASP HAS REJECTED ACTIVITY FOR THE CASE AND SUB SERVICE
+          axios.post(
+            `${caseServiceUrl}/${endpoint.case.getAspRejectedActivity}`,
+            aspData
+          ),
+          //GET ASP WORK STATUS BASED ON PICKUP DATE AND DRIVERS AVAILABILITY
+          axios.post(`${caseServiceUrl}/${endpoint.case.getAspWorkStatus}`, {
+            aspId: aspDropProviders[dl].dataValues.id,
+            hasMechanic: aspDropProviders[dl].dataValues.hasMechanic,
+            aspMechanics: aspDropProviders[dl].aspMechanics,
+            serviceScheduledDate: inData.deliveryRequestPickupDate,
+          }),
+          // GET CASE ASSIGNED COUNT FOR SERVICE SCHEDULED DATE
+          axios.post(
+            `${caseServiceUrl}/${endpoint.case.getAspCaseAssignedCountForScheduledDate}`,
+            {
               aspId: aspDropProviders[dl].dataValues.id,
-              hasMechanic: aspDropProviders[dl].dataValues.hasMechanic,
-              aspMechanics: aspDropProviders[dl].aspMechanics,
               serviceScheduledDate: inData.deliveryRequestPickupDate,
-            }),
-            // GET CASE ASSIGNED COUNT FOR SERVICE SCHEDULED DATE
-            axios.post(
-              `${caseServiceUrl}/${endpoint.case.getAspCaseAssignedCountForScheduledDate}`,
-              {
-                aspId: aspDropProviders[dl].dataValues.id,
-                serviceScheduledDate: inData.deliveryRequestPickupDate,
-              }
-            ),
-            // GET REGIONAL MANAGER DETAILS
-            axios.post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
-              id: aspDropProviders[dl].dataValues.rmId,
-            }),
-          ]);
+            }
+          ),
+          // GET REGIONAL MANAGER DETAILS
+          axios.post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
+            id: aspDropProviders[dl].dataValues.rmId,
+          }),
+        ]);
 
         // CHECK COCO TECHNICIAN IS IN SHIFT FOR THE COCO VEHICLE
         let cocoTechnicianInShift = false;
@@ -2826,7 +2930,10 @@ export namespace AspDataController {
         // }
 
         //IF OWN PATROL ASP THEN GET COCO VEHICLE MATCHED MECHANICS
-        if (aspDropProviders[dl].dataValues.isOwnPatrol && aspDropProviders[dl].ownPatrolVehicle) {
+        if (
+          aspDropProviders[dl].dataValues.isOwnPatrol &&
+          aspDropProviders[dl].ownPatrolVehicle
+        ) {
           const vehicleMatchedMechanics = await AspMechanic.findAll({
             where: {
               cocoVehicleId: aspDropProviders[dl].ownPatrolVehicle.id,
@@ -2850,21 +2957,35 @@ export namespace AspDataController {
         }
 
         //GET ASP MECHANIC IN PROGRESS ACTIVITIES
-        if (aspDropProviders[dl].dataValues.aspMechanics && aspDropProviders[dl].dataValues.aspMechanics.length > 0) {
-          const aspMechanicIds = aspDropProviders[dl].dataValues.aspMechanics.map(
-            (aspMechanic: any) => aspMechanic?.dataValues?.id
-          ).filter((id: any) => id != null);
+        if (
+          aspDropProviders[dl].dataValues.aspMechanics &&
+          aspDropProviders[dl].dataValues.aspMechanics.length > 0
+        ) {
+          const aspMechanicIds = aspDropProviders[dl].dataValues.aspMechanics
+            .map((aspMechanic: any) => aspMechanic?.dataValues?.id)
+            .filter((id: any) => id != null);
 
           if (aspMechanicIds.length > 0) {
-            const aspMechanicInProgressResponse = await Utils.aspMechanicInProgressActivities(aspMechanicIds, inData.serviceScheduledDate);
-            if (aspMechanicInProgressResponse.success && Array.isArray(aspMechanicInProgressResponse.data)) {
-              for (const aspMechanic of aspDropProviders[dl].dataValues.aspMechanics) {
+            const aspMechanicInProgressResponse =
+              await Utils.aspMechanicInProgressActivities(
+                aspMechanicIds,
+                inData.serviceScheduledDate
+              );
+            if (
+              aspMechanicInProgressResponse.success &&
+              Array.isArray(aspMechanicInProgressResponse.data)
+            ) {
+              for (const aspMechanic of aspDropProviders[dl].dataValues
+                .aspMechanics) {
                 if (aspMechanic?.dataValues?.id) {
-                  const aspMechanicInProgressActivity = aspMechanicInProgressResponse.data.find(
-                    (activity: any) => activity.aspMechanicId === aspMechanic.dataValues.id
-                  );
+                  const aspMechanicInProgressActivity =
+                    aspMechanicInProgressResponse.data.find(
+                      (activity: any) =>
+                        activity.aspMechanicId === aspMechanic.dataValues.id
+                    );
                   if (aspMechanicInProgressActivity) {
-                    aspMechanic.dataValues.assignedCount = aspMechanicInProgressActivity.assignedCount || 0;
+                    aspMechanic.dataValues.assignedCount =
+                      aspMechanicInProgressActivity.assignedCount || 0;
                   }
                 }
               }
@@ -2878,13 +2999,16 @@ export namespace AspDataController {
           aspDropProviders[dl].dataValues.aspMechanics.length > 0
         ) {
           const uniqueMap = new Map();
-          for (const aspMechanic of aspDropProviders[dl].dataValues.aspMechanics) {
+          for (const aspMechanic of aspDropProviders[dl].dataValues
+            .aspMechanics) {
             const id = aspMechanic?.dataValues?.id;
             if (id && !uniqueMap.has(id)) {
               uniqueMap.set(id, aspMechanic);
             }
           }
-          aspDropProviders[dl].dataValues.aspMechanics = Array.from(uniqueMap.values());
+          aspDropProviders[dl].dataValues.aspMechanics = Array.from(
+            uniqueMap.values()
+          );
         }
 
         //GET ASP MECHANIC WORK STATUS
@@ -2907,7 +3031,8 @@ export namespace AspDataController {
           activityId: getAspActivityDetail.data.success
             ? getAspActivityDetail.data.data
             : null,
-          rejectedActivityExists: getAspRejectedActivity?.data?.activityExists || false,
+          rejectedActivityExists:
+            getAspRejectedActivity?.data?.activityExists || false,
           distance: dropData[dl]?.elements[0]?.distance?.text || null,
           duration: dropData[dl]?.elements[0]?.duration?.text || null,
           estimatedTotalKm: combinedDistances1[dl]?.totalDistance || null,
@@ -3021,7 +3146,10 @@ export namespace AspDataController {
 
             // Collect all refund status IDs from all activities and transactions
             for (const activity of activities) {
-              if (activity?.activityTransactions && activity.activityTransactions.length > 0) {
+              if (
+                activity?.activityTransactions &&
+                activity.activityTransactions.length > 0
+              ) {
                 for (const transaction of activity.activityTransactions) {
                   if (transaction?.refundStatusId) {
                     refundStatusIds.push(transaction.refundStatusId);
@@ -3093,9 +3221,9 @@ export namespace AspDataController {
             },
             refundStatus: refundStatusId
               ? {
-                refundStatusId: refundStatusId,
-                refundStatusName: refundStatusName,
-              }
+                  refundStatusId: refundStatusId,
+                  refundStatusName: refundStatusName,
+                }
               : null,
             activities: activities,
           };
@@ -3339,10 +3467,7 @@ export namespace AspDataController {
           ...(aspClientInclude ? [aspClientInclude] : []),
           {
             model: OwnPatrolVehicle,
-            attributes: [
-              "id",
-              "vehicleRegistrationNumber"
-            ],
+            attributes: ["id", "vehicleRegistrationNumber"],
             required: false,
             include: [
               {
@@ -3403,7 +3528,10 @@ export namespace AspDataController {
       ];
 
       // MECHANICAL SERVICE OR CUSTODY SUB SERVICE (subServiceId === 24)
-      if ((inData.serviceId && inData.serviceId === 2) || (inData.subServiceId && inData.subServiceId === 24)) {
+      if (
+        (inData.serviceId && inData.serviceId === 2) ||
+        (inData.subServiceId && inData.subServiceId === 24)
+      ) {
         const [aspToBreakdown, breakdownToAsp]: any = await Promise.all([
           Utils.getGoogleDistanceDuration(
             breakdownNearByAspList,
@@ -3463,43 +3591,45 @@ export namespace AspDataController {
             caseDetailId: inData.caseDetailId,
             subServiceId: inData.subServiceId,
           };
-          const [getAspActivityDetail, getAspRejectedActivity, getAspWorkStatus, getAspCaseAssignedCount, getRmDetail]: any =
-            await Promise.all([
-              // CHECK ASP HAS ACTIVITY FOR CASE DETAIL AND GIVE ACTIVITY ID
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspActivityId}`,
-                aspData
-              ),
-              //CHECK ASP HAS REJECTED ACTIVITY FOR THE CASE AND SUB SERVICE
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspRejectedActivity}`,
-                aspData
-              ),
-              // GET ASP WORK STATUS BASED ON SERVICE SCHEDULED DATE AND DRIVERS AVAILABILITY
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspWorkStatus}`,
-                {
-                  aspId: aspBreakdownNearbyProviders[i].dataValues.id,
-                  hasMechanic:
-                    aspBreakdownNearbyProviders[i].dataValues.hasMechanic,
-                  aspMechanics:
-                    aspBreakdownNearbyProviders[i].dataValues.aspMechanics,
-                  serviceScheduledDate: inData.serviceScheduledDate,
-                }
-              ),
-              // GET CASE ASSIGNED COUNT FOR SERVICE SCHEDULED DATE
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspCaseAssignedCountForScheduledDate}`,
-                {
-                  aspId: aspBreakdownNearbyProviders[i].dataValues.id,
-                  serviceScheduledDate: inData.serviceScheduledDate,
-                }
-              ),
-              // GET REGIONAL MANAGER DETAILS
-              axios.post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
-                id: aspBreakdownNearbyProviders[i].dataValues.rmId,
-              }),
-            ]);
+          const [
+            getAspActivityDetail,
+            getAspRejectedActivity,
+            getAspWorkStatus,
+            getAspCaseAssignedCount,
+            getRmDetail,
+          ]: any = await Promise.all([
+            // CHECK ASP HAS ACTIVITY FOR CASE DETAIL AND GIVE ACTIVITY ID
+            axios.post(
+              `${caseServiceUrl}/${endpoint.case.getAspActivityId}`,
+              aspData
+            ),
+            //CHECK ASP HAS REJECTED ACTIVITY FOR THE CASE AND SUB SERVICE
+            axios.post(
+              `${caseServiceUrl}/${endpoint.case.getAspRejectedActivity}`,
+              aspData
+            ),
+            // GET ASP WORK STATUS BASED ON SERVICE SCHEDULED DATE AND DRIVERS AVAILABILITY
+            axios.post(`${caseServiceUrl}/${endpoint.case.getAspWorkStatus}`, {
+              aspId: aspBreakdownNearbyProviders[i].dataValues.id,
+              hasMechanic:
+                aspBreakdownNearbyProviders[i].dataValues.hasMechanic,
+              aspMechanics:
+                aspBreakdownNearbyProviders[i].dataValues.aspMechanics,
+              serviceScheduledDate: inData.serviceScheduledDate,
+            }),
+            // GET CASE ASSIGNED COUNT FOR SERVICE SCHEDULED DATE
+            axios.post(
+              `${caseServiceUrl}/${endpoint.case.getAspCaseAssignedCountForScheduledDate}`,
+              {
+                aspId: aspBreakdownNearbyProviders[i].dataValues.id,
+                serviceScheduledDate: inData.serviceScheduledDate,
+              }
+            ),
+            // GET REGIONAL MANAGER DETAILS
+            axios.post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
+              id: aspBreakdownNearbyProviders[i].dataValues.rmId,
+            }),
+          ]);
 
           // CHECK COCO TECHNICIAN IS IN SHIFT FOR THE COCO VEHICLE
           let cocoTechnicianInShift = false;
@@ -3559,10 +3689,14 @@ export namespace AspDataController {
           // }
 
           //IF OWN PATROL ASP THEN GET COCO VEHICLE MATCHED MECHANICS
-          if (aspBreakdownNearbyProviders[i].dataValues.isOwnPatrol && aspBreakdownNearbyProviders[i].ownPatrolVehicle) {
+          if (
+            aspBreakdownNearbyProviders[i].dataValues.isOwnPatrol &&
+            aspBreakdownNearbyProviders[i].ownPatrolVehicle
+          ) {
             const vehicleMatchedMechanics = await AspMechanic.findAll({
               where: {
-                cocoVehicleId: aspBreakdownNearbyProviders[i].ownPatrolVehicle.id,
+                cocoVehicleId:
+                  aspBreakdownNearbyProviders[i].ownPatrolVehicle.id,
                 aspTypeId: 771, // COCO
               },
               attributes: [
@@ -3583,21 +3717,37 @@ export namespace AspDataController {
           }
 
           //GET ASP MECHANIC IN PROGRESS ACTIVITIES
-          if (aspBreakdownNearbyProviders[i].dataValues.aspMechanics && aspBreakdownNearbyProviders[i].dataValues.aspMechanics.length > 0) {
-            const aspMechanicIds = aspBreakdownNearbyProviders[i].dataValues.aspMechanics
+          if (
+            aspBreakdownNearbyProviders[i].dataValues.aspMechanics &&
+            aspBreakdownNearbyProviders[i].dataValues.aspMechanics.length > 0
+          ) {
+            const aspMechanicIds = aspBreakdownNearbyProviders[
+              i
+            ].dataValues.aspMechanics
               .map((aspMechanic: any) => aspMechanic?.dataValues?.id)
               .filter((id: any) => id != null); // Filter out any null/undefined IDs
 
             if (aspMechanicIds.length > 0) {
-              const aspMechanicInProgressResponse = await Utils.aspMechanicInProgressActivities(aspMechanicIds, inData.serviceScheduledDate);
-              if (aspMechanicInProgressResponse.success && Array.isArray(aspMechanicInProgressResponse.data)) {
-                for (const aspMechanic of aspBreakdownNearbyProviders[i].dataValues.aspMechanics) {
+              const aspMechanicInProgressResponse =
+                await Utils.aspMechanicInProgressActivities(
+                  aspMechanicIds,
+                  inData.serviceScheduledDate
+                );
+              if (
+                aspMechanicInProgressResponse.success &&
+                Array.isArray(aspMechanicInProgressResponse.data)
+              ) {
+                for (const aspMechanic of aspBreakdownNearbyProviders[i]
+                  .dataValues.aspMechanics) {
                   if (aspMechanic?.dataValues?.id) {
-                    const aspMechanicInProgressActivity = aspMechanicInProgressResponse.data.find(
-                      (activity: any) => activity.aspMechanicId === aspMechanic.dataValues.id
-                    );
+                    const aspMechanicInProgressActivity =
+                      aspMechanicInProgressResponse.data.find(
+                        (activity: any) =>
+                          activity.aspMechanicId === aspMechanic.dataValues.id
+                      );
                     if (aspMechanicInProgressActivity) {
-                      aspMechanic.dataValues.assignedCount = aspMechanicInProgressActivity.assignedCount || 0;
+                      aspMechanic.dataValues.assignedCount =
+                        aspMechanicInProgressActivity.assignedCount || 0;
                     }
                   }
                 }
@@ -3611,13 +3761,16 @@ export namespace AspDataController {
             aspBreakdownNearbyProviders[i].dataValues.aspMechanics.length > 0
           ) {
             const uniqueMap = new Map();
-            for (const aspMechanic of aspBreakdownNearbyProviders[i].dataValues.aspMechanics) {
+            for (const aspMechanic of aspBreakdownNearbyProviders[i].dataValues
+              .aspMechanics) {
               const id = aspMechanic?.dataValues?.id;
               if (id && !uniqueMap.has(id)) {
                 uniqueMap.set(id, aspMechanic);
               }
             }
-            aspBreakdownNearbyProviders[i].dataValues.aspMechanics = Array.from(uniqueMap.values());
+            aspBreakdownNearbyProviders[i].dataValues.aspMechanics = Array.from(
+              uniqueMap.values()
+            );
           }
 
           //GET ASP MECHANIC WORK STATUS
@@ -3647,7 +3800,8 @@ export namespace AspDataController {
             isTechnicianAssigned: getAspActivityDetail.data.success
               ? getAspActivityDetail.data.isTechnicianAssigned
               : false,
-            rejectedActivityExists: getAspRejectedActivity?.data?.activityExists || false,
+            rejectedActivityExists:
+              getAspRejectedActivity?.data?.activityExists || false,
             distance: data[i]?.elements[0]?.distance?.text || null,
             duration: data[i]?.elements[0]?.duration?.text || null,
             estimatedTotalKm: combinedDistances[i]?.totalDistance || null,
@@ -3790,43 +3944,45 @@ export namespace AspDataController {
             caseDetailId: inData.caseDetailId,
             subServiceId: inData.subServiceId,
           };
-          const [getAspActivityDetail, getAspRejectedActivity, getAspWorkStatus, getAspCaseAssignedCount, getRmDetail]: any =
-            await Promise.all([
-              // CHECK ASP HAS ACTIVITY FOR CASE DETAIL AND GIVE ACTIVITY ID
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspActivityId}`,
-                aspData
-              ),
-              //CHECK ASP HAS REJECTED ACTIVITY FOR THE CASE AND SUB SERVICE
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspRejectedActivity}`,
-                aspData
-              ),
-              // GET ASP WORK STATUS BASED ON SERVICE SCHEDULED DATE AND DRIVERS AVAILABILITY
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspWorkStatus}`,
-                {
-                  aspId: aspBreakdownNearbyProviders[i].dataValues.id,
-                  hasMechanic:
-                    aspBreakdownNearbyProviders[i].dataValues.hasMechanic,
-                  aspMechanics:
-                    aspBreakdownNearbyProviders[i].dataValues.aspMechanics,
-                  serviceScheduledDate: inData.serviceScheduledDate,
-                }
-              ),
-              // GET CASE ASSIGNED COUNT FOR SERVICE SCHEDULED DATE
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspCaseAssignedCountForScheduledDate}`,
-                {
-                  aspId: aspBreakdownNearbyProviders[i].dataValues.id,
-                  serviceScheduledDate: inData.serviceScheduledDate,
-                }
-              ),
-              // GET REGIONAL MANAGER DETAILS
-              axios.post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
-                id: aspBreakdownNearbyProviders[i].dataValues.rmId,
-              }),
-            ]);
+          const [
+            getAspActivityDetail,
+            getAspRejectedActivity,
+            getAspWorkStatus,
+            getAspCaseAssignedCount,
+            getRmDetail,
+          ]: any = await Promise.all([
+            // CHECK ASP HAS ACTIVITY FOR CASE DETAIL AND GIVE ACTIVITY ID
+            axios.post(
+              `${caseServiceUrl}/${endpoint.case.getAspActivityId}`,
+              aspData
+            ),
+            //CHECK ASP HAS REJECTED ACTIVITY FOR THE CASE AND SUB SERVICE
+            axios.post(
+              `${caseServiceUrl}/${endpoint.case.getAspRejectedActivity}`,
+              aspData
+            ),
+            // GET ASP WORK STATUS BASED ON SERVICE SCHEDULED DATE AND DRIVERS AVAILABILITY
+            axios.post(`${caseServiceUrl}/${endpoint.case.getAspWorkStatus}`, {
+              aspId: aspBreakdownNearbyProviders[i].dataValues.id,
+              hasMechanic:
+                aspBreakdownNearbyProviders[i].dataValues.hasMechanic,
+              aspMechanics:
+                aspBreakdownNearbyProviders[i].dataValues.aspMechanics,
+              serviceScheduledDate: inData.serviceScheduledDate,
+            }),
+            // GET CASE ASSIGNED COUNT FOR SERVICE SCHEDULED DATE
+            axios.post(
+              `${caseServiceUrl}/${endpoint.case.getAspCaseAssignedCountForScheduledDate}`,
+              {
+                aspId: aspBreakdownNearbyProviders[i].dataValues.id,
+                serviceScheduledDate: inData.serviceScheduledDate,
+              }
+            ),
+            // GET REGIONAL MANAGER DETAILS
+            axios.post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
+              id: aspBreakdownNearbyProviders[i].dataValues.rmId,
+            }),
+          ]);
 
           // CHECK COCO TECHNICIAN IS IN SHIFT FOR THE COCO VEHICLE
           let cocoTechnicianInShift = false;
@@ -3885,12 +4041,15 @@ export namespace AspDataController {
           //   }
           // }
 
-
           //IF OWN PATROL ASP THEN GET COCO VEHICLE MATCHED MECHANICS
-          if (aspBreakdownNearbyProviders[i].dataValues.isOwnPatrol && aspBreakdownNearbyProviders[i].ownPatrolVehicle) {
+          if (
+            aspBreakdownNearbyProviders[i].dataValues.isOwnPatrol &&
+            aspBreakdownNearbyProviders[i].ownPatrolVehicle
+          ) {
             const vehicleMatchedMechanics = await AspMechanic.findAll({
               where: {
-                cocoVehicleId: aspBreakdownNearbyProviders[i].ownPatrolVehicle.id,
+                cocoVehicleId:
+                  aspBreakdownNearbyProviders[i].ownPatrolVehicle.id,
                 aspTypeId: 771, // COCO
               },
               attributes: [
@@ -3911,21 +4070,37 @@ export namespace AspDataController {
           }
 
           //GET ASP MECHANIC IN PROGRESS ACTIVITIES
-          if (aspBreakdownNearbyProviders[i].dataValues.aspMechanics && aspBreakdownNearbyProviders[i].dataValues.aspMechanics.length > 0) {
-            const aspMechanicIds = aspBreakdownNearbyProviders[i].dataValues.aspMechanics
+          if (
+            aspBreakdownNearbyProviders[i].dataValues.aspMechanics &&
+            aspBreakdownNearbyProviders[i].dataValues.aspMechanics.length > 0
+          ) {
+            const aspMechanicIds = aspBreakdownNearbyProviders[
+              i
+            ].dataValues.aspMechanics
               .map((aspMechanic: any) => aspMechanic?.dataValues?.id)
               .filter((id: any) => id != null); // Filter out any null/undefined IDs
 
             if (aspMechanicIds.length > 0) {
-              const aspMechanicInProgressResponse = await Utils.aspMechanicInProgressActivities(aspMechanicIds, inData.serviceScheduledDate);
-              if (aspMechanicInProgressResponse.success && Array.isArray(aspMechanicInProgressResponse.data)) {
-                for (const aspMechanic of aspBreakdownNearbyProviders[i].dataValues.aspMechanics) {
+              const aspMechanicInProgressResponse =
+                await Utils.aspMechanicInProgressActivities(
+                  aspMechanicIds,
+                  inData.serviceScheduledDate
+                );
+              if (
+                aspMechanicInProgressResponse.success &&
+                Array.isArray(aspMechanicInProgressResponse.data)
+              ) {
+                for (const aspMechanic of aspBreakdownNearbyProviders[i]
+                  .dataValues.aspMechanics) {
                   if (aspMechanic?.dataValues?.id) {
-                    const aspMechanicInProgressActivity = aspMechanicInProgressResponse.data.find(
-                      (activity: any) => activity.aspMechanicId === aspMechanic.dataValues.id
-                    );
+                    const aspMechanicInProgressActivity =
+                      aspMechanicInProgressResponse.data.find(
+                        (activity: any) =>
+                          activity.aspMechanicId === aspMechanic.dataValues.id
+                      );
                     if (aspMechanicInProgressActivity) {
-                      aspMechanic.dataValues.assignedCount = aspMechanicInProgressActivity.assignedCount || 0;
+                      aspMechanic.dataValues.assignedCount =
+                        aspMechanicInProgressActivity.assignedCount || 0;
                     }
                   }
                 }
@@ -3939,13 +4114,16 @@ export namespace AspDataController {
             aspBreakdownNearbyProviders[i].dataValues.aspMechanics.length > 0
           ) {
             const uniqueMap = new Map();
-            for (const aspMechanic of aspBreakdownNearbyProviders[i].dataValues.aspMechanics) {
+            for (const aspMechanic of aspBreakdownNearbyProviders[i].dataValues
+              .aspMechanics) {
               const id = aspMechanic?.dataValues?.id;
               if (id && !uniqueMap.has(id)) {
                 uniqueMap.set(id, aspMechanic);
               }
             }
-            aspBreakdownNearbyProviders[i].dataValues.aspMechanics = Array.from(uniqueMap.values());
+            aspBreakdownNearbyProviders[i].dataValues.aspMechanics = Array.from(
+              uniqueMap.values()
+            );
           }
 
           //GET ASP MECHANIC WORK STATUS
@@ -3975,7 +4153,8 @@ export namespace AspDataController {
             isTechnicianAssigned: getAspActivityDetail.data.success
               ? getAspActivityDetail.data.isTechnicianAssigned
               : false,
-            rejectedActivityExists: getAspRejectedActivity?.data?.activityExists || false,
+            rejectedActivityExists:
+              getAspRejectedActivity?.data?.activityExists || false,
             distance: data[i]?.elements[0]?.distance?.text || null,
             duration: data[i]?.elements[0]?.duration?.text || null,
             estimatedTotalKm: combinedDistances[i]?.totalDistance || null,
@@ -4098,10 +4277,7 @@ export namespace AspDataController {
             ...(aspClientInclude ? [aspClientInclude] : []),
             {
               model: OwnPatrolVehicle,
-              attributes: [
-                "id",
-                "vehicleRegistrationNumber"
-              ],
+              attributes: ["id", "vehicleRegistrationNumber"],
               required: false,
               include: [
                 {
@@ -4219,41 +4395,43 @@ export namespace AspDataController {
             caseDetailId: inData.caseDetailId,
             subServiceId: inData.subServiceId,
           };
-          const [getAspActivityDetail, getAspRejectedActivity, getAspWorkStatus, getAspCaseAssignedCount, getRmDetail]: any =
-            await Promise.all([
-              // CHECK ASP HAS ACTIVITY FOR CASE DETAIL AND GIVE ACTIVITY ID
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspActivityId}`,
-                aspData
-              ),
-              //CHECK ASP HAS REJECTED ACTIVITY FOR THE CASE AND SUB SERVICE
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspRejectedActivity}`,
-                aspData
-              ),
-              // GET ASP WORK STATUS BASED ON PICKUP DATE AND DRIVERS AVAILABILITY
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspWorkStatus}`,
-                {
-                  aspId: aspDropProviders[dl].dataValues.id,
-                  hasMechanic: aspDropProviders[dl].dataValues.hasMechanic,
-                  aspMechanics: aspDropProviders[dl].dataValues.aspMechanics,
-                  serviceScheduledDate: inData.serviceScheduledDate,
-                }
-              ),
-              // GET CASE ASSIGNED COUNT FOR SERVICE SCHEDULED DATE
-              axios.post(
-                `${caseServiceUrl}/${endpoint.case.getAspCaseAssignedCountForScheduledDate}`,
-                {
-                  aspId: aspDropProviders[dl].dataValues.id,
-                  serviceScheduledDate: inData.serviceScheduledDate,
-                }
-              ),
-              // GET REGIONAL MANAGER DETAILS
-              axios.post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
-                id: aspDropProviders[dl].dataValues.rmId,
-              }),
-            ]);
+          const [
+            getAspActivityDetail,
+            getAspRejectedActivity,
+            getAspWorkStatus,
+            getAspCaseAssignedCount,
+            getRmDetail,
+          ]: any = await Promise.all([
+            // CHECK ASP HAS ACTIVITY FOR CASE DETAIL AND GIVE ACTIVITY ID
+            axios.post(
+              `${caseServiceUrl}/${endpoint.case.getAspActivityId}`,
+              aspData
+            ),
+            //CHECK ASP HAS REJECTED ACTIVITY FOR THE CASE AND SUB SERVICE
+            axios.post(
+              `${caseServiceUrl}/${endpoint.case.getAspRejectedActivity}`,
+              aspData
+            ),
+            // GET ASP WORK STATUS BASED ON PICKUP DATE AND DRIVERS AVAILABILITY
+            axios.post(`${caseServiceUrl}/${endpoint.case.getAspWorkStatus}`, {
+              aspId: aspDropProviders[dl].dataValues.id,
+              hasMechanic: aspDropProviders[dl].dataValues.hasMechanic,
+              aspMechanics: aspDropProviders[dl].dataValues.aspMechanics,
+              serviceScheduledDate: inData.serviceScheduledDate,
+            }),
+            // GET CASE ASSIGNED COUNT FOR SERVICE SCHEDULED DATE
+            axios.post(
+              `${caseServiceUrl}/${endpoint.case.getAspCaseAssignedCountForScheduledDate}`,
+              {
+                aspId: aspDropProviders[dl].dataValues.id,
+                serviceScheduledDate: inData.serviceScheduledDate,
+              }
+            ),
+            // GET REGIONAL MANAGER DETAILS
+            axios.post(`${userServiceUrl}/${userServiceEndpoint.getUser}`, {
+              id: aspDropProviders[dl].dataValues.rmId,
+            }),
+          ]);
 
           // CHECK COCO TECHNICIAN IS IN SHIFT FOR THE COCO VEHICLE
           let cocoTechnicianInShift = false;
@@ -4312,7 +4490,10 @@ export namespace AspDataController {
           // }
 
           //IF OWN PATROL ASP THEN GET COCO VEHICLE MATCHED MECHANICS
-          if (aspDropProviders[dl].dataValues.isOwnPatrol && aspDropProviders[dl].ownPatrolVehicle) {
+          if (
+            aspDropProviders[dl].dataValues.isOwnPatrol &&
+            aspDropProviders[dl].ownPatrolVehicle
+          ) {
             const vehicleMatchedMechanics = await AspMechanic.findAll({
               where: {
                 cocoVehicleId: aspDropProviders[dl].ownPatrolVehicle.id,
@@ -4336,21 +4517,35 @@ export namespace AspDataController {
           }
 
           //GET ASP MECHANIC IN PROGRESS ACTIVITIES
-          if (aspDropProviders[dl].dataValues.aspMechanics && aspDropProviders[dl].dataValues.aspMechanics.length > 0) {
+          if (
+            aspDropProviders[dl].dataValues.aspMechanics &&
+            aspDropProviders[dl].dataValues.aspMechanics.length > 0
+          ) {
             const aspMechanicIds = aspDropProviders[dl].dataValues.aspMechanics
               .map((aspMechanic: any) => aspMechanic?.dataValues?.id)
               .filter((id: any) => id != null); // Filter out any null/undefined IDs
 
             if (aspMechanicIds.length > 0) {
-              const aspMechanicInProgressResponse = await Utils.aspMechanicInProgressActivities(aspMechanicIds, inData.serviceScheduledDate);
-              if (aspMechanicInProgressResponse.success && Array.isArray(aspMechanicInProgressResponse.data)) {
-                for (const aspMechanic of aspDropProviders[dl].dataValues.aspMechanics) {
+              const aspMechanicInProgressResponse =
+                await Utils.aspMechanicInProgressActivities(
+                  aspMechanicIds,
+                  inData.serviceScheduledDate
+                );
+              if (
+                aspMechanicInProgressResponse.success &&
+                Array.isArray(aspMechanicInProgressResponse.data)
+              ) {
+                for (const aspMechanic of aspDropProviders[dl].dataValues
+                  .aspMechanics) {
                   if (aspMechanic?.dataValues?.id) {
-                    const aspMechanicInProgressActivity = aspMechanicInProgressResponse.data.find(
-                      (activity: any) => activity.aspMechanicId === aspMechanic.dataValues.id
-                    );
+                    const aspMechanicInProgressActivity =
+                      aspMechanicInProgressResponse.data.find(
+                        (activity: any) =>
+                          activity.aspMechanicId === aspMechanic.dataValues.id
+                      );
                     if (aspMechanicInProgressActivity) {
-                      aspMechanic.dataValues.assignedCount = aspMechanicInProgressActivity.assignedCount || 0;
+                      aspMechanic.dataValues.assignedCount =
+                        aspMechanicInProgressActivity.assignedCount || 0;
                     }
                   }
                 }
@@ -4364,13 +4559,16 @@ export namespace AspDataController {
             aspDropProviders[dl].dataValues.aspMechanics.length > 0
           ) {
             const uniqueMap = new Map();
-            for (const aspMechanic of aspDropProviders[dl].dataValues.aspMechanics) {
+            for (const aspMechanic of aspDropProviders[dl].dataValues
+              .aspMechanics) {
               const id = aspMechanic?.dataValues?.id;
               if (id && !uniqueMap.has(id)) {
                 uniqueMap.set(id, aspMechanic);
               }
             }
-            aspDropProviders[dl].dataValues.aspMechanics = Array.from(uniqueMap.values());
+            aspDropProviders[dl].dataValues.aspMechanics = Array.from(
+              uniqueMap.values()
+            );
           }
 
           //GET ASP MECHANIC WORK STATUS
@@ -4398,7 +4596,8 @@ export namespace AspDataController {
             isTechnicianAssigned: getAspActivityDetail.data.success
               ? getAspActivityDetail.data.isTechnicianAssigned
               : false,
-            rejectedActivityExists: getAspRejectedActivity?.data?.activityExists || false,
+            rejectedActivityExists:
+              getAspRejectedActivity?.data?.activityExists || false,
             distance: dropData[dl]?.elements[0]?.distance?.text || null,
             duration: dropData[dl]?.elements[0]?.duration?.text || null,
             estimatedTotalKm: combinedDistances1[dl]?.totalDistance || null,
@@ -4538,16 +4737,16 @@ export namespace AspDataController {
 
       const cancelReasonData = cancelReasonId
         ? await Utils.findByModelId(CaseCancelReason, cancelReasonId, [
-          "id",
-          "name",
-        ])
+            "id",
+            "name",
+          ])
         : null;
       const callCenterData = callCenterId
         ? await Utils.findByModelId(CallCenter, callCenterId, [
-          "id",
-          "name",
-          "address",
-        ])
+            "id",
+            "name",
+            "address",
+          ])
         : null;
       const clientData = clientId
         ? await Utils.findByModelId(Client, clientId, ["id", "name"])
@@ -4557,160 +4756,160 @@ export namespace AspDataController {
         : null;
       const vehicleModelData = vehicleModelId
         ? await Utils.findByModelId(VehicleModel, vehicleModelId, [
-          "id",
-          "name",
-          "vehicleMakeId",
-          "vehicleTypeId",
-        ])
+            "id",
+            "name",
+            "vehicleMakeId",
+            "vehicleTypeId",
+          ])
         : null;
       const subjectData = subjectId
         ? await Utils.findByModelId(CaseSubject, subjectId, [
-          "id",
-          "name",
-          "clientId",
-        ])
+            "id",
+            "name",
+            "clientId",
+          ])
         : null;
       const pickupDealerData = pickupDealerId
         ? await Utils.findByModelId(Dealer, pickupDealerId, [
-          "id",
-          "code",
-          "name",
-          "lat",
-          "long",
-        ])
+            "id",
+            "code",
+            "name",
+            "lat",
+            "long",
+          ])
         : null;
       const pickupDealerStateData = pickupDealerStateId
         ? await Utils.findByModelId(State, pickupDealerStateId, [
-          "id",
-          "code",
-          "name",
-          "countryId",
-        ])
+            "id",
+            "code",
+            "name",
+            "countryId",
+          ])
         : null;
       const pickupDealerCityData = pickupDealerCityId
         ? await Utils.findByModelId(City, pickupDealerCityId, [
-          "id",
-          "name",
-          "stateId",
-        ])
+            "id",
+            "name",
+            "stateId",
+          ])
         : null;
       const dropDealerData = dropDealerId
         ? await Utils.findByModelId(Dealer, dropDealerId, [
-          "id",
-          "code",
-          "name",
-          "lat",
-          "long",
-        ])
+            "id",
+            "code",
+            "name",
+            "lat",
+            "long",
+          ])
         : null;
       const dropDealerStateData = dropDealerStateId
         ? await Utils.findByModelId(State, dropDealerStateId, [
-          "id",
-          "code",
-          "name",
-          "countryId",
-        ])
+            "id",
+            "code",
+            "name",
+            "countryId",
+          ])
         : null;
       const dropDealerCityData = dropDealerCityId
         ? await Utils.findByModelId(City, dropDealerCityId, [
-          "id",
-          "name",
-          "stateId",
-        ])
+            "id",
+            "name",
+            "stateId",
+          ])
         : null;
       const caseStatusData = caseStatusId
         ? await Utils.findByModelId(CaseStatus, caseStatusId, ["id", "name"])
         : null;
       const financeStatusData = financeStatusId
         ? await Utils.findByModelId(ActivityFinanceStatus, financeStatusId, [
-          "id",
-          "name",
-        ])
+            "id",
+            "name",
+          ])
         : null;
       const deliveryRequestSubServiceData = deliveryRequestSubServiceId
         ? await Utils.findByModelId(SubService, deliveryRequestSubServiceId, [
-          "id",
-          "name",
-          "serviceId",
-        ])
+            "id",
+            "name",
+            "serviceId",
+          ])
         : null;
       const aspActivityStatusData = aspActivityStatusId
         ? await Utils.findByModelId(AspActivityStatus, aspActivityStatusId, [
-          "id",
-          "name",
-        ])
+            "id",
+            "name",
+          ])
         : null;
       const aspActivityRejectReasonData = aspActivityRejectReasonId
         ? await Utils.findByModelId(
-          AspActivityRejectReason,
-          aspActivityRejectReasonId,
-          ["id", "name"]
-        )
+            AspActivityRejectReason,
+            aspActivityRejectReasonId,
+            ["id", "name"]
+          )
         : null;
       const activityStatusData = activityStatusId
         ? await Utils.findByModelId(ActivityStatus, activityStatusId, [
-          "id",
-          "name",
-        ])
+            "id",
+            "name",
+          ])
         : null;
       const aspData = aspId
         ? await Utils.findByModelId(Asp, aspId, [
-          "id",
-          "code",
-          "name",
-          "addressLineOne",
-          "addressLineTwo",
-        ])
+            "id",
+            "code",
+            "name",
+            "addressLineOne",
+            "addressLineTwo",
+          ])
         : null;
       const aspRejectedCcDetailReasonData = aspRejectedCcDetailReasonId
         ? await Utils.findByModelId(
-          AspRejectedCcDetailReason,
-          aspRejectedCcDetailReasonId,
-          ["id", "name"]
-        )
+            AspRejectedCcDetailReason,
+            aspRejectedCcDetailReasonId,
+            ["id", "name"]
+          )
         : null;
       const breakdownCityData = breakdownCityId
         ? await Utils.findByModelId(
-          City,
-          breakdownCityId,
-          ["id", "name", "locationTypeId", "locationCategoryId", "stateId"],
-          [
-            {
-              model: Config,
-              as: "locationType",
-              attributes: ["id", "name"],
-            },
-            {
-              model: Config,
-              as: "locationCategory",
-              attributes: ["id", "name"],
-            },
-            {
-              model: State,
-              as: "state",
-              attributes: ["id", "name"],
-            },
-          ]
-        )
+            City,
+            breakdownCityId,
+            ["id", "name", "locationTypeId", "locationCategoryId", "stateId"],
+            [
+              {
+                model: Config,
+                as: "locationType",
+                attributes: ["id", "name"],
+              },
+              {
+                model: Config,
+                as: "locationCategory",
+                attributes: ["id", "name"],
+              },
+              {
+                model: State,
+                as: "state",
+                attributes: ["id", "name"],
+              },
+            ]
+          )
         : null;
       const subServiceData = subServiceId
         ? await Utils.findByModelId(SubService, subServiceId, [
-          "id",
-          "name",
-          "serviceId",
-        ])
+            "id",
+            "name",
+            "serviceId",
+          ])
         : null;
       const advancePaymentMethodData = advancePaymentMethodId
         ? await Utils.findByModelId(Config, advancePaymentMethodId, [
-          "id",
-          "name",
-        ])
+            "id",
+            "name",
+          ])
         : null;
       const advancePaymentPaidToData = advancePaymentPaidToId
         ? await Utils.findByModelId(Config, advancePaymentPaidToId, [
-          "id",
-          "name",
-        ])
+            "id",
+            "name",
+          ])
         : null;
 
       if (cancelReasonId && !cancelReasonData) {
@@ -5003,7 +5202,10 @@ export namespace AspDataController {
 
       // Build OwnPatrolVehicle where clause for Service Organisation filter
       const ownPatrolVehicleWhere: any = {};
-      if (payload.serviceOrganisationIds && payload.serviceOrganisationIds.length > 0) {
+      if (
+        payload.serviceOrganisationIds &&
+        payload.serviceOrganisationIds.length > 0
+      ) {
         ownPatrolVehicleWhere.serviceOrganisationId = {
           [Op.in]: payload.serviceOrganisationIds,
         };
@@ -5026,7 +5228,10 @@ export namespace AspDataController {
           model: OwnPatrolVehicle,
           attributes: ["id", "vehicleRegistrationNumber", "vehicleTypeId"],
           required: Object.keys(ownPatrolVehicleWhere).length > 0, // Make required if filtering by serviceOrganisationId
-          where: Object.keys(ownPatrolVehicleWhere).length > 0 ? ownPatrolVehicleWhere : undefined,
+          where:
+            Object.keys(ownPatrolVehicleWhere).length > 0
+              ? ownPatrolVehicleWhere
+              : undefined,
           include: [
             {
               model: VehicleType,
@@ -5110,15 +5315,22 @@ export namespace AspDataController {
 
       // Prepare filter parameters to pass to Case Service for status filtering
       const statusFilterParams: any = {};
-      if (payload.aspActivityStatusIds && payload.aspActivityStatusIds.length > 0) {
+      if (
+        payload.aspActivityStatusIds &&
+        payload.aspActivityStatusIds.length > 0
+      ) {
         statusFilterParams.aspActivityStatusIds = payload.aspActivityStatusIds;
       }
       if (payload.activityStatusIds && payload.activityStatusIds.length > 0) {
         statusFilterParams.activityStatusIds = payload.activityStatusIds;
       }
       // Un-Assignment Reasons (mapped to rejectReasonId in ActivityAspDetails)
-      if (payload.unAssignmentReasonIds && payload.unAssignmentReasonIds.length > 0) {
-        statusFilterParams.unAssignmentReasonIds = payload.unAssignmentReasonIds;
+      if (
+        payload.unAssignmentReasonIds &&
+        payload.unAssignmentReasonIds.length > 0
+      ) {
+        statusFilterParams.unAssignmentReasonIds =
+          payload.unAssignmentReasonIds;
       }
       // Case-related filters - filter ASPs based on their assigned cases
       if (payload.statusIds && payload.statusIds.length > 0) {
@@ -5174,7 +5386,8 @@ export namespace AspDataController {
         if (asp.isOwnPatrol) {
           const vehicleInfo = aspToVehicleMap.get(asp.id);
           if (vehicleInfo) {
-            asp.vehicleRegistrationNumber = vehicleInfo.vehicleRegistrationNumber;
+            asp.vehicleRegistrationNumber =
+              vehicleInfo.vehicleRegistrationNumber;
             asp.vehicleTypeId = vehicleInfo.vehicleTypeId;
             asp.vehicleType = vehicleInfo.vehicleType;
           }
@@ -5341,7 +5554,10 @@ export namespace AspDataController {
 
       // Build OwnPatrolVehicle where clause for Service Organisation filter
       const ownPatrolVehicleWhere: any = {};
-      if (payload.serviceOrganisationIds && payload.serviceOrganisationIds.length > 0) {
+      if (
+        payload.serviceOrganisationIds &&
+        payload.serviceOrganisationIds.length > 0
+      ) {
         ownPatrolVehicleWhere.serviceOrganisationId = {
           [Op.in]: payload.serviceOrganisationIds,
         };
@@ -5381,9 +5597,20 @@ export namespace AspDataController {
         {
           model: OwnPatrolVehicle,
           as: "cocoVehicle",
-          attributes: ["id", "vehicleRegistrationNumber", "vehicleTypeId", "aspId"],
-          required: Object.keys(ownPatrolVehicleWhere).length > 0 || Object.keys(aspWhere).length > 0 || Object.keys(aspClientWhere).length > 0, // Make required if filtering by serviceOrganisationId or aspCode or clientIds
-          where: Object.keys(ownPatrolVehicleWhere).length > 0 ? ownPatrolVehicleWhere : undefined,
+          attributes: [
+            "id",
+            "vehicleRegistrationNumber",
+            "vehicleTypeId",
+            "aspId",
+          ],
+          required:
+            Object.keys(ownPatrolVehicleWhere).length > 0 ||
+            Object.keys(aspWhere).length > 0 ||
+            Object.keys(aspClientWhere).length > 0, // Make required if filtering by serviceOrganisationId or aspCode or clientIds
+          where:
+            Object.keys(ownPatrolVehicleWhere).length > 0
+              ? ownPatrolVehicleWhere
+              : undefined,
           include: [
             {
               model: VehicleType,
@@ -5394,20 +5621,24 @@ export namespace AspDataController {
             {
               model: Asp,
               attributes: ["id", "code", "name"],
-              required: Object.keys(aspWhere).length > 0 || Object.keys(aspClientWhere).length > 0,
+              required:
+                Object.keys(aspWhere).length > 0 ||
+                Object.keys(aspClientWhere).length > 0,
               where: Object.keys(aspWhere).length > 0 ? aspWhere : undefined,
               paranoid: false,
-              ...(Object.keys(aspClientWhere).length > 0 ? {
-                include: [
-                  {
-                    model: AspClient,
-                    as: "clients",
-                    attributes: ["id", "clientId"],
-                    required: true,
-                    where: aspClientWhere,
-                  },
-                ],
-              } : {}),
+              ...(Object.keys(aspClientWhere).length > 0
+                ? {
+                    include: [
+                      {
+                        model: AspClient,
+                        as: "clients",
+                        attributes: ["id", "clientId"],
+                        required: true,
+                        where: aspClientWhere,
+                      },
+                    ],
+                  }
+                : {}),
             },
           ],
         },
@@ -5470,9 +5701,12 @@ export namespace AspDataController {
             ? technician.cocoVehicle[0]
             : technician.cocoVehicle;
           if (vehicle) {
-            technician.vehicleRegistrationNumber = vehicle.vehicleRegistrationNumber;
+            technician.vehicleRegistrationNumber =
+              vehicle.vehicleRegistrationNumber;
             technician.vehicleTypeId = vehicle.vehicleTypeId;
-            technician.vehicleType = vehicle.vehicleType ? vehicle.vehicleType.name : null;
+            technician.vehicleType = vehicle.vehicleType
+              ? vehicle.vehicleType.name
+              : null;
           }
         }
       });
@@ -5491,15 +5725,22 @@ export namespace AspDataController {
 
       // Prepare filter parameters to pass to Case Service for status filtering
       const statusFilterParams: any = {};
-      if (payload.aspActivityStatusIds && payload.aspActivityStatusIds.length > 0) {
+      if (
+        payload.aspActivityStatusIds &&
+        payload.aspActivityStatusIds.length > 0
+      ) {
         statusFilterParams.aspActivityStatusIds = payload.aspActivityStatusIds;
       }
       if (payload.activityStatusIds && payload.activityStatusIds.length > 0) {
         statusFilterParams.activityStatusIds = payload.activityStatusIds;
       }
       // Un-Assignment Reasons (mapped to rejectReasonId in ActivityAspDetails)
-      if (payload.unAssignmentReasonIds && payload.unAssignmentReasonIds.length > 0) {
-        statusFilterParams.unAssignmentReasonIds = payload.unAssignmentReasonIds;
+      if (
+        payload.unAssignmentReasonIds &&
+        payload.unAssignmentReasonIds.length > 0
+      ) {
+        statusFilterParams.unAssignmentReasonIds =
+          payload.unAssignmentReasonIds;
       }
       // Case-related filters - filter technicians based on their assigned cases
       if (payload.statusIds && payload.statusIds.length > 0) {
@@ -5635,8 +5876,8 @@ export namespace AspDataController {
           activityStatus: activityStatus?.dataValues.name || null,
           activityAgentPickedAt: item.activityAgentPickedAt
             ? moment
-              .tz(item.activityAgentPickedAt, "Asia/Kolkata")
-              .format("DD/MM/YYYY hh:mm A")
+                .tz(item.activityAgentPickedAt, "Asia/Kolkata")
+                .format("DD/MM/YYYY hh:mm A")
             : "",
           vin: item.caseVin,
           registrationNumber: item.caseRegistrationNumber,
@@ -5782,8 +6023,8 @@ export namespace AspDataController {
           activityAppStatus: activityAppStatus?.dataValues.name || null,
           activityAgentPickedAt: item.activityAgentPickedAt
             ? moment
-              .tz(item.activityAgentPickedAt, "Asia/Kolkata")
-              .format("DD/MM/YYYY hh:mm A")
+                .tz(item.activityAgentPickedAt, "Asia/Kolkata")
+                .format("DD/MM/YYYY hh:mm A")
             : "",
           vin: item.caseVin,
           registrationNumber: item.caseRegistrationNumber,

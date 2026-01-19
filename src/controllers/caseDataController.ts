@@ -1791,11 +1791,11 @@ export namespace CaseDataController {
       const promises: any = [];
       promises.push(
         Service.findAll({
-          where: {
-            id: {
-              [Op.notIn]: [2], //Mechanical
-            },
-          },
+          // where: {
+          //   id: {
+          //     [Op.notIn]: [2], //Mechanical
+          //   },
+          // },
           attributes: ["id", "name"],
           order: [["id", "asc"]],
         })
