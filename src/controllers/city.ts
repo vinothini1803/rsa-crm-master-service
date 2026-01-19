@@ -31,7 +31,7 @@ const userServiceEndpoint = config.userService.endpoint;
 class CityController {
   private static defaultLimit: number = 50;
   private static defaultOffset: number = 0;
-  constructor() { }
+  constructor() {}
 
   getList = async (req: any, res: any) => {
     try {
@@ -132,7 +132,10 @@ class CityController {
             [Sequelize.col("taluk.name"), "talukName"],
             [Sequelize.col("district.name"), "districtName"],
             [Sequelize.col("nearestCity.name"), "nearestCityName"],
-            [Sequelize.col("serviceOrganisation.name"), "serviceOrganisationName"],
+            [
+              Sequelize.col("serviceOrganisation.name"),
+              "serviceOrganisationName",
+            ],
             [Sequelize.col("region.name"), "regionName"],
             [Sequelize.col("locationType.name"), "locationTypeName"],
             [Sequelize.col("municipalLimit.name"), "municipalLimitName"],
@@ -362,30 +365,31 @@ class CityController {
         };
       }
 
-      const [countries, getUsersResponse, configs, serviceOrganisations] = await Promise.all([
-        Country.findAll({
-          attributes: ["id", "name"],
-          order: [["id", "asc"]],
-        }),
-        //GET SERVICE REGIOANAL MANAGER, NETWORK HEAD, CUSTOMER EXPERIENCE HEAD, COMMAND CENTRE HEAD, SERVICE HEAD, BO HEAD LIST
-        axios.post(
-          `${userServiceUrl}/userMaster/${userServiceEndpoint.userMaster.getUsersByRoles}`,
-          {
-            roleIds: [6, 22, 23, 24, 26, 27],
-          }
-        ),
-        Config.findAll({
-          where: {
-            typeId: { [Op.in]: [53, 54, 55] },
-          },
-          attributes: ["id", "typeId", "name"],
-          order: [["id", "asc"]],
-        }),
-        ServiceOrganisation.findAll({
-          attributes: ["id", "name"],
-          order: [["id", "asc"]],
-        })
-      ]);
+      const [countries, getUsersResponse, configs, serviceOrganisations] =
+        await Promise.all([
+          Country.findAll({
+            attributes: ["id", "name"],
+            order: [["id", "asc"]],
+          }),
+          //GET SERVICE REGIOANAL MANAGER, NETWORK HEAD, CUSTOMER EXPERIENCE HEAD, COMMAND CENTRE HEAD, SERVICE HEAD, BO HEAD LIST
+          axios.post(
+            `${userServiceUrl}/userMaster/${userServiceEndpoint.userMaster.getUsersByRoles}`,
+            {
+              roleIds: [6, 22, 23, 24, 26, 27],
+            }
+          ),
+          Config.findAll({
+            where: {
+              typeId: { [Op.in]: [53, 54, 55] },
+            },
+            attributes: ["id", "typeId", "name"],
+            order: [["id", "asc"]],
+          }),
+          ServiceOrganisation.findAll({
+            attributes: ["id", "name"],
+            order: [["id", "asc"]],
+          }),
+        ]);
 
       let networkHeads = [];
       let serviceRegionalManagers = [];
@@ -681,7 +685,10 @@ class CityController {
       if (!cityData || cityData.length === 0) {
         return res.status(200).json({
           success: false,
-          error: startDate && endDate ? "No record found for the selected date range" : "No record found",
+          error:
+            startDate && endDate
+              ? "No record found for the selected date range"
+              : "No record found",
         });
       }
 
@@ -1048,7 +1055,7 @@ class CityController {
             const customerExperienceHeadDetail = managerDetails.find(
               (managerDetail: any) =>
                 managerDetail.userName ==
-                trimmedCustomerExperienceHeadUserName &&
+                  trimmedCustomerExperienceHeadUserName &&
                 managerDetail.roleId == 23
             );
 
@@ -1138,14 +1145,17 @@ class CityController {
           //SERVICE ORGANISATION
           let serviceOrganisationId = null;
           if (record.serviceOrganisationName) {
-            const trimmedServiceOrganisationName = record.serviceOrganisationName.trim();
-            const serviceOrganisationExists = await ServiceOrganisation.findOne({
-              where: {
-                name: trimmedServiceOrganisationName,
-              },
-              attributes: ["id"],
-              paranoid: false,
-            });
+            const trimmedServiceOrganisationName =
+              record.serviceOrganisationName.trim();
+            const serviceOrganisationExists = await ServiceOrganisation.findOne(
+              {
+                where: {
+                  name: trimmedServiceOrganisationName,
+                },
+                attributes: ["id"],
+                paranoid: false,
+              }
+            );
 
             if (serviceOrganisationExists) {
               serviceOrganisationId = serviceOrganisationExists.dataValues.id;
@@ -1241,10 +1251,10 @@ class CityController {
         newRecordsCreated > 0 && existingRecordsUpdated > 0
           ? `New city created (${newRecordsCreated} records) and existing city updated (${existingRecordsUpdated} records)`
           : newRecordsCreated > 0
-            ? `New city created (${newRecordsCreated} records)`
-            : existingRecordsUpdated > 0
-              ? `Existing city updated (${existingRecordsUpdated} records)`
-              : "No city updated or created";
+          ? `New city created (${newRecordsCreated} records)`
+          : existingRecordsUpdated > 0
+          ? `Existing city updated (${existingRecordsUpdated} records)`
+          : "No city updated or created";
 
       //If No Record Have Error Send Respond
       // if (errorData.length <= 0) {
@@ -1300,9 +1310,16 @@ class CityController {
           errors: errors,
         });
       }
+console.log(payload,"payloaddddddd");
 
       const cityExists = await City.findOne({
-        attributes: ["id", "name"],
+        attributes: [
+          "id",
+          "name",
+          "locationTypeId",
+          "municipalLimitId",
+          "nearestCityId",
+        ],
         where: {
           id: payload.id,
         },
@@ -1320,6 +1337,8 @@ class CityController {
         data: cityExists,
       });
     } catch (error: any) {
+      console.log("errorrrrrrrrr",error.message);
+      
       return res.status(500).json({
         success: false,
         error: error?.message,
@@ -1329,8 +1348,11 @@ class CityController {
 
   public async getCityData(req: any, res: any) {
     try {
+      console.log(req.body, "req.body");
+
       const city = await City.findOne({ where: { id: req.body.cityId } });
       if (!city) {
+        console.log("iffffffff");
         return res.status(200).json({
           success: false,
           message: "No city found",
@@ -1341,6 +1363,7 @@ class CityController {
         data: city,
       });
     } catch (error: any) {
+      console.log("error.message", error.message);
       return res.status(500).json({
         success: false,
         error: error.message,
@@ -1609,8 +1632,10 @@ async function getCityFinalData(cityData: any) {
           ? municipalLimit.dataValues.name
           : null,
         "Nearest City Name": nearestCity ? nearestCity.dataValues.name : null,
-        "Service Organisation": serviceOrganisation ? serviceOrganisation.dataValues.name : null,
-        "Region": region ? region.dataValues.name : null,
+        "Service Organisation": serviceOrganisation
+          ? serviceOrganisation.dataValues.name
+          : null,
+        Region: region ? region.dataValues.name : null,
         "Location Category Name": locationCategory
           ? locationCategory.dataValues.name
           : null,
